@@ -1,0 +1,45 @@
+{
+  "name": "reviews",
+  "version": "1.0.0",
+  "description": "Interactive Review Section for a TripAdvisor listing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node ./server/app.js",
+    "watch": "webpack -d --watch",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quacklemore/Reviews.git"
+  },
+  "keywords": [],
+  "author": "Taeksu Kim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quacklemore/Reviews/issues"
+  },
+  "homepage": "https://github.com/quacklemore/Reviews#readme",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "jquery": "^3.5.1",
+    "mocha": "^8.1.3",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.6",
+    "mysql": "^2.18.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "styled-components": "^5.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "nodemon": "^2.0.4",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
+  }
+}
