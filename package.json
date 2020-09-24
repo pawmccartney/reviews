@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start": "node ./server/app.js",
+    "start": "nodemon ./server/index.js",
     "watch": "webpack -d --watch",
     "build": "webpack --mode production"
   },

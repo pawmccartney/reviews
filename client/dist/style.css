@@ -1,0 +1,16 @@
+.reviews-container {
+  width: 60%;
+  max-width: 500px;
+}
+body {
+  background-color: beige;
+}
+.reviews-filter {
+  background-color: white;
+}
+.reviews-review {
+  background-color: white;
+}
+.reviews-search {
+  background-color: white;
+}
