@@ -14,3 +14,20 @@ body {
 .reviews-search {
   background-color: white;
 }
+.reviews-profile-picture {
+  width: auto;
+  height: 30px;
+}
+.reviews-pictures {
+  display: flex;
+  width:auto;
+}
+.reviews-pictures img {
+  width: auto;
+  max-height: 100px;
+}
+.reviews-body-helpful-share {
+  display:flex;
+  width: 30%;
+  justify-content: space-between;
+}
