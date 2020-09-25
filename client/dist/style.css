@@ -1,0 +1,33 @@
+.reviews-container {
+  width: 60%;
+  max-width: 500px;
+}
+body {
+  background-color: beige;
+}
+.reviews-filter {
+  background-color: white;
+}
+.reviews-review {
+  background-color: white;
+}
+.reviews-search {
+  background-color: white;
+}
+.reviews-profile-picture {
+  width: auto;
+  height: 30px;
+}
+.reviews-pictures {
+  display: flex;
+  width:auto;
+}
+.reviews-pictures img {
+  width: auto;
+  max-height: 100px;
+}
+.reviews-body-helpful-share {
+  display:flex;
+  width: 30%;
+  justify-content: space-between;
+}
