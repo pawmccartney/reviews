@@ -10,13 +10,31 @@ body {
 }
 .reviews-review {
   background-color: white;
+  padding-left: 2em;
+  padding-right: 2em;
 }
 .reviews-search {
   background-color: white;
 }
+.reviews-header {
+  padding-top: 1em;
+  display: flex;
+}
 .reviews-profile-picture {
-  width: auto;
-  height: 30px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.reviews-reviewer-information {
+  width:100%;
+  padding-left: 1em;
+}
+#reviewer {
+  color: black;
+}
+.reviews-reviewer-information div {
+  color: gray;
 }
 .reviews-pictures {
   display: flex;
@@ -26,8 +44,50 @@ body {
   width: auto;
   max-height: 100px;
 }
+.reviews-ratings-dot {
+  margin-right: 4px;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}
+#color {
+  background-color: green;
+}
+#empty {
+  background-color: white;
+}
+#disclaimer {
+  color: gray;
+  font-size: 10px;
+}
 .reviews-body-helpful-share {
   display:flex;
   width: 30%;
   justify-content: space-between;
+}
+.reviews-footer-response {
+  display:flex;
+  width: 100%;
+}
+.reviews-responder-profile-pic {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.reviews-response {
+  padding-left: 1em;
+}
+.reviews-response-date {
+  font-size: 15px;
+}
+.reviews-response-date {
+  padding-top: 5px;
+  font-size: 10px;
+  opacity: 90%;
+}
+.reviews-response-text {
+  font-size: 15px;
+  opacity: 90%;
 }
