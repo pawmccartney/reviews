@@ -9,10 +9,22 @@ let reviewSchema = mongoose.Schema({
   },
   reviewInfo: {
     reviewDate: Number,
+    reviewTitle: String,
     reviewText: String,
+    reviewTripType: String,
     reviewPictures: {picture1: String, picture2: String},
+    reviewRatings: Number,
     contribution: Number,
     helpful: Number
+  },
+  responderInfo: {
+    responderOrg: String,
+    responderName: String,
+    responderPosition: String,
+    responderDate: Number,
+    responderText: String,
+    responderClose: String,
+
   }
 });
 
