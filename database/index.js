@@ -6,13 +6,26 @@ let reviewSchema = mongoose.Schema({
     memberId: Number,
     memberImg: String,
     memberUserName: String,
+    memberContributions: Number,
+    memberHelpful: Number
   },
   reviewInfo: {
     reviewDate: Number,
+    reviewTitle: String,
     reviewText: String,
+    reviewTripType: String,
     reviewPictures: {picture1: String, picture2: String},
-    contribution: Number,
+    reviewRatings: Number,
     helpful: Number
+  },
+  responderInfo: {
+    responderOrg: String,
+    responderName: String,
+    responderPosition: String,
+    responderPicture: String,
+    responderDate: Number,
+    responderText: String,
+    responderClose: String
   }
 });
 
