@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test', {useMongoClient: true});
+mongoose.connect('mongodb://localhost/review', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 let reviewSchema = mongoose.Schema({
   memberInfo: {
@@ -10,7 +13,7 @@ let reviewSchema = mongoose.Schema({
     memberHelpful: Number
   },
   reviewInfo: {
-    reviewDate: Number,
+    reviewDate: String,
     reviewTitle: String,
     reviewText: String,
     reviewTripType: String,
@@ -23,7 +26,7 @@ let reviewSchema = mongoose.Schema({
     responderName: String,
     responderPosition: String,
     responderPicture: String,
-    responderDate: Number,
+    responderDate: String,
     responderText: String,
     responderClose: String
   }
@@ -43,4 +46,17 @@ var save = (review) => {
   })
 }
 
+var getAllReviews = () => {
+  return new Promise((resolve, reject) => {
+    Review.find({}).exec((err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    })
+  })
+}
+
 module.exports.save = save;
+module.exports.getAllReviews = getAllReviews;
