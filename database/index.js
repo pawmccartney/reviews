@@ -46,4 +46,17 @@ var save = (review) => {
   })
 }
 
+var getAllReviews = () => {
+  return new Promise((resolve, reject) => {
+    Review.find({}).exec((err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results);
+      }
+    })
+  })
+}
+
 module.exports.save = save;
+module.exports.getAllReviews = getAllReviews;
