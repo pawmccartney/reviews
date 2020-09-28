@@ -18,17 +18,17 @@ let reviewSchema = mongoose.Schema({
     reviewText: String,
     reviewTripType: String,
     reviewPictures: {picture1: String, picture2: String},
-    reviewRatings: Number,
-    helpful: Number
+    reviewRatings: Number
   },
   responderInfo: {
+    hotelId: Number,
     responderOrg: String,
+    responderPicture: String,
+    responderClose: String,
+    responderDate: String,
     responderName: String,
     responderPosition: String,
-    responderPicture: String,
-    responderDate: String,
-    responderText: String,
-    responderClose: String
+    responderText: String
   }
 });
 
@@ -46,9 +46,9 @@ var save = (review) => {
   })
 }
 
-var getAllReviews = () => {
+var getReviewsByHotel = (hotelId) => {
   return new Promise((resolve, reject) => {
-    Review.find({}).exec((err, results) => {
+    Review.find({"responderInfo.hotelId": hotelId}).exec((err, results) => {
       if (err) {
         reject(err);
       } else {
@@ -59,4 +59,4 @@ var getAllReviews = () => {
 }
 
 module.exports.save = save;
-module.exports.getAllReviews = getAllReviews;
+module.exports.getReviewsByHotel = getReviewsByHotel;

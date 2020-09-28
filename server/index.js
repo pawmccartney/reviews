@@ -13,7 +13,9 @@ app.listen(port, function() {
 });
 
 app.get('/reviews', (req, res) => {
-  db.getAllReviews()
+  // console.log(req.body._id); //postman req.body._id sent in as 0
+  let id = req.body.id || 0;
+  db.getReviewsByHotel(id)
     .then(result => {
       res.send(result);
     });
