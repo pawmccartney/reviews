@@ -9,6 +9,7 @@ let reviewSchema = mongoose.Schema({
     memberId: Number,
     memberImg: String,
     memberUserName: String,
+    memberLocation: String,
     memberContributions: Number,
     memberHelpful: Number
   },
