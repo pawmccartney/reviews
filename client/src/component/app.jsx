@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Review from './review.jsx'
 
 
-class App extends React.Component {
+class reviewApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {}
@@ -24,4 +24,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default reviewApp;

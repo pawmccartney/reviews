@@ -4,7 +4,7 @@ const faker = require('faker');
 
 var hotels = [];
 
-for (var i = 0; i < 1; i++) {
+for (var i = 0; i < 100; i++) {
   var currHotelReview = {
     responderInfo: {},
     memberInfo: {},
@@ -18,7 +18,7 @@ for (var i = 0; i < 1; i++) {
   currHotelReview.responderInfo.responderPicture = 'https://st.depositphotos.com/1009420/1287/i/450/depositphotos_12879459-stock-photo-welsh-corgi-pembroke-dog.jpg';
   currHotelReview.responderInfo.responderClose = faker.company.bsAdjective();
 
-  var randomReviewNumber = Math.ceil(Math.random() * 1);
+  var randomReviewNumber = Math.ceil(Math.random() * 5);
   for (var j = 0; j <randomReviewNumber; j++) {
     const randomDate = faker.date.recent(90);
     currHotelReview.responderInfo.responderDate = randomDate;
@@ -29,8 +29,8 @@ for (var i = 0; i < 1; i++) {
     currHotelReview.memberInfo.memberId = j;
     currHotelReview.memberInfo.memberImg = 'https://cdn.pixabay.com/photo/2015/07/08/01/21/korean-jindo-835297_1280.jpg';
     currHotelReview.memberInfo.memberUserName = faker.internet.userName();
-    currHotelReview.memberInfo.helpful = Math.floor(Math.random() * 5);
-    currHotelReview.memberInfo.contribution = Math.ceil(Math.random() * 50);
+    currHotelReview.memberInfo.memberContributions = Math.ceil(Math.random() * 50);
+    currHotelReview.memberInfo.memberHelpful = Math.floor(Math.random() * 5);
 
     //review info
     currHotelReview.reviewInfo.reviewDate = randomDate;
