@@ -82,6 +82,9 @@ body {
 #empty {
   background-color: white;
 }
+#more {
+  display:none;
+}
 #disclaimer {
   color: gray;
   font-size: 10px;
