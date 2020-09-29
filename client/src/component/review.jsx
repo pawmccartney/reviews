@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-const Review = ({currHotelReview}) => (
+const Review = ({currHotelReview, readMore}) => (
   <div className='reviews-review'>
     <div className='reviews-header'>
       <img className='reviews-profile-picture' src={currHotelReview.memberInfo.memberImg}></img>
@@ -24,7 +24,6 @@ const Review = ({currHotelReview}) => (
     <div className='reviews-body'>
       <div className='reviews-ratings'>
         {currHotelReview.reviewInfo.reviewRatings.map((rating) => {
-          console.log(rating);
           if (rating === 1) {
             return <span className='reviews-ratings-dot' id='color'></span>
           } else {
@@ -34,7 +33,16 @@ const Review = ({currHotelReview}) => (
       </div>
       <br></br>
       <b>{currHotelReview.reviewInfo.reviewTitle}</b>
-      <div>"{currHotelReview.reviewInfo.reviewText}"</div>
+      <div>"
+        <span id="prev">
+          {currHotelReview.reviewInfo.reviewText.slice(0, 20)}
+        </span>
+        <span id="more">
+          {currHotelReview.reviewInfo.reviewText}
+        </span>
+        "
+        <button onClick={readMore} id="readMore">Read more</button>
+      </div>
       <br></br>
       <div><b>Date of stay</b>: {moment(currHotelReview.reviewInfo.reviewDate).format('MMM Do')}</div>
       <br></br>

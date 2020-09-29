@@ -19,6 +19,23 @@ class ReviewApp extends React.Component {
       });
   }
 
+  readMore(event) {
+    let prev = event.target.parentElement.children[0]
+    let moreText = event.target.parentElement.children[1];
+    let readMore = event.target;
+    console.log(event.target);
+    // console.log('prev.style.display: ', prev.style.display);
+    if (prev.style.display === "none") {
+      prev.style.display = "inline";
+      readMore.innerHTML = "Read more";
+      moreText.style.display = "none";
+    } else {
+      prev.style.display = "none";
+      readMore.innerHTML = "Read less";
+      moreText.style.display = "inline";
+    }
+  }
+
   render() {
     let hotelReviews = this.state.hotelReviews;
     return (
@@ -28,7 +45,7 @@ class ReviewApp extends React.Component {
         <section className='reviews-search'> Search Section</section>
         <br></br>
         <div className='reviews-table'>
-          {hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review}/><br></br></div>)}
+          {hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this)}/><br></br></div>)}
         </div>
       </div>
     )
