@@ -16,7 +16,6 @@ class ReviewApp extends React.Component {
     axios.get('/reviews')
       .then(result => {
         this.setState({hotelReviews: result.data});
-        console.log(this.state.hotelReviews);
       });
   }
 
@@ -25,9 +24,9 @@ class ReviewApp extends React.Component {
     return (
       <div className='reviews-container'>
         <section className='reviews-filter'>Reviews / Filter Section</section>
-        <hr></hr>
+        <br></br>
         <section className='reviews-search'> Search Section</section>
-        <hr></hr>
+        <br></br>
         <div className='reviews-table'>
           {hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review}/><br></br></div>)}
         </div>

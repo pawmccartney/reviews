@@ -18,8 +18,8 @@ let reviewSchema = mongoose.Schema({
     reviewTitle: String,
     reviewText: String,
     reviewTripType: String,
-    reviewPictures: {picture1: String, picture2: String},
-    reviewRatings: Number
+    reviewPictures: {picture1: String, picture2: String, picture3: String, picture4: String},
+    reviewRatings: Array
   },
   responderInfo: {
     hotelId: Number,
