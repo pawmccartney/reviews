@@ -23,8 +23,7 @@ class ReviewApp extends React.Component {
     let prev = event.target.parentElement.children[0]
     let moreText = event.target.parentElement.children[1];
     let readMore = event.target;
-    console.log(event.target);
-    // console.log('prev.style.display: ', prev.style.display);
+
     if (prev.style.display === "none") {
       prev.style.display = "inline";
       readMore.innerHTML = "Read more";
