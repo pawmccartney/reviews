@@ -85,6 +85,13 @@ body {
 #more {
   display:none;
 }
+#readMore {
+  border:none;
+  color:gray;
+  text-decoration: underline;
+  background-color:inherit;
+  cursor:pointer;
+}
 #disclaimer {
   color: gray;
   font-size: 10px;
