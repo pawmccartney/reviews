@@ -4,7 +4,7 @@
   "description": "Interactive Review Section for a TripAdvisor listing.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test",
+    "test": "jest",
     "start": "nodemon ./server/index.js",
     "watch": "webpack -d --watch",
     "build": "webpack --mode production",
@@ -41,6 +41,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
+    "jest": "^26.4.2",
     "nodemon": "^2.0.4",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
