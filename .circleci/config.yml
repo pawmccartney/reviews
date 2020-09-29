@@ -9,9 +9,9 @@ workflows:
         docker:
           -image: circleci/node:10.15.3
         steps:
-          -checkout
-          -run:
+          - checkout
+          - run:
             command: |
-            "sudo npm install -g npm@latest"
-            "npm install"
-            "npm run test"
+            sudo npm install -g npm@latest
+            npm install
+            npm run test
