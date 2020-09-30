@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Review from './review.jsx'
+import Review from './review.jsx';
+import Filters from './filters.jsx';
 import axios from 'axios';
 
 
@@ -38,8 +39,8 @@ class ReviewApp extends React.Component {
   render() {
     let hotelReviews = this.state.hotelReviews;
     return (
-      <div className='reviews-container'>
-        <section className='reviews-filter'>Reviews / Filter Section</section>
+      <div>
+        <Filters className='reviews-filter'/>
         <br></br>
         <section className='reviews-search'> Search Section</section>
         <br></br>
