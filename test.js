@@ -9,7 +9,7 @@ test("clien't get request is met with an array", () => {
     .then(result => {
       expect(Array.isArray(result.data)).toBe(true);
     }).catch(err => {
-      console.log('ERROR: ', err);
+      throw Error('ERROR: second test');
     })
 });
 
@@ -23,7 +23,7 @@ test("expects data from server to have the reviewer's name and review", () => {
       expect(reviewer).toBeTruthy();
       expect(review).toBeTruthy();
     }).catch(err => {
-      console.log('ERROR: ', err);
+      throw Error('ERROR: third test');
     })
 });
 
