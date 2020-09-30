@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Interactive Review Section for a TripAdvisor listing.",
   "main": "index.js",
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node"
+  },
   "scripts": {
     "test": "jest",
     "start": "nodemon ./server/index.js",
@@ -24,6 +28,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "chai": "^4.2.0",
+    "docker": "^1.0.0",
     "express": "^4.17.1",
     "faker": "^5.1.0",
     "jquery": "^3.5.1",
