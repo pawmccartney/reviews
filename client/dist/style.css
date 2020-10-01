@@ -5,18 +5,17 @@
 body {
   background-color: beige;
 }
-.reviews-search, .reviews-review {
+.reviews-search {
   background-color: white;
   max-width: 800px;
   min-width: 432px;
   width: 60%;
   padding-left: 1em;
   padding-right: 1em;
-
 }
 .reviews-filter {
   background-color: white;
-  max-width: 800px;
+  max-width: 832px;
   min-width: 464px;
   width: calc(60% + 2em);
   border: 1px solid lightgray;
@@ -81,10 +80,29 @@ body {
 .reviews-search-features {
   display: inline-block;
 }
-.reviews-header {
-  padding-top: 1em;
-  display: flex;
+
+.reviews-review {
+  background-color: white;
+  max-width: 832px;
+  min-width: 464px;
+  width: calc(60% + 2em);
 }
+.reviews-header, .reviews-body, .reviews-footer {
+  background-color: white;
+  max-width: 800px;
+  min-width: 432px;
+  width: calc(100% - 2em);
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.reviews-header {
+  display: flex;
+  padding-top: 1em;
+}
+#footer {
+  border-top: 1px dashed gray;
+}
+
 .reviews-profile-picture {
   width: 45px;
   height: 45px;
@@ -120,8 +138,6 @@ body {
 }
 .reviews-ratings-dot {
   margin-right: 4px;
-  /* max-width: 15px;
-  min-height: 15px; */
   width: 15px;
   height: 15px;
   border-radius: 50%;
@@ -147,6 +163,7 @@ body {
 #disclaimer {
   color: gray;
   font-size: 10px;
+  padding-left: 2em;
 }
 .reviews-body-helpful-share {
   display:flex;

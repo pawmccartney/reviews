@@ -37,6 +37,13 @@ class ReviewApp extends React.Component {
     }
   }
 
+  sort(array) {
+    //each element has element.reviewInfo.reviewDate
+    //use that to compare, greater one ends up front.
+
+    return array
+  }
+
   render() {
     let hotelReviews = this.state.hotelReviews;
     return (
@@ -46,7 +53,7 @@ class ReviewApp extends React.Component {
         <Search/>
         <br></br>
         <div className='reviews-table'>
-          {hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this)}/><br></br></div>)}
+          {this.sort(hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this))}/><br></br></div>)}
         </div>
       </div>
     )
