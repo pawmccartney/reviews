@@ -11,6 +11,5 @@ jobs:
           command: |
             sudo npm install -g npm@latest
             npm install
-            npm start
             npm run test
 

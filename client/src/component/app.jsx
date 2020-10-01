@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Review from './review.jsx'
+import Review from './review.jsx';
+import Filters from './filters.jsx';
+import Search from './search.jsx';
 import axios from 'axios';
 
 
@@ -38,10 +40,10 @@ class ReviewApp extends React.Component {
   render() {
     let hotelReviews = this.state.hotelReviews;
     return (
-      <div className='reviews-container'>
-        <section className='reviews-filter'>Reviews / Filter Section</section>
+      <div>
+        <Filters/>
         <br></br>
-        <section className='reviews-search'> Search Section</section>
+        <Search/>
         <br></br>
         <div className='reviews-table'>
           {hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this)}/><br></br></div>)}

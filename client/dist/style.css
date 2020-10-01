@@ -5,29 +5,81 @@
 body {
   background-color: beige;
 }
+.reviews-search, .reviews-review {
+  background-color: white;
+  max-width: 800px;
+  min-width: 432px;
+  width: 60%;
+  padding-left: 1em;
+  padding-right: 1em;
+
+}
 .reviews-filter {
   background-color: white;
-  max-width: 500px;
-  min-width: 432px;
-  width: 60%;
-  padding-left: 1em;
-  padding-right: 1em;
+  max-width: 800px;
+  min-width: 464px;
+  width: calc(60% + 2em);
+  border: 1px solid lightgray;
 }
-.reviews-search {
-  background-color: white;
-  max-width: 500px;
-  min-width: 432px;
-  width: 60%;
-  padding-left: 1em;
-  padding-right: 1em;
+.reviews-filters-navbar {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  text-align: center;
+  padding-left: 0;
 }
-.reviews-review {
+.reviews-filters-navbar-option {
+  padding-top: 2em;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid lightgray;
+}
+.reviews-filter-title-parts {
+  display: inline-block;
+}
+.reviews-filter-title-buttons {
+  float: right;
+}
+#reviewButton {
+  color: white;
+  background-color: black;
+  vertical-align: middle;
+  margin-top: 25%;
+}
+.reviews-filters-main {
+  padding: 0em 1em;
+}
+.reviews-selections {
+  display: grid;
+  grid-template-columns: 4fr 2fr 2fr 2fr;
+}
+.reviews-selections-rating-count {
+  display: inline-block;
+}
+.reviews-selections-rating-bars {
+  display: inline-block;
+}
+.reviews-selections-rating-outerBar {
+  position: relative;
+  left:0;
+  width: 100px;
+  background-color: lightgray;
+}
+.reviews-selections-rating-innerBar {
+  display: block;
+  width: 20%;
+  height: 10px;
+  background-color: black;
+}
+
+.reviews-filter-popular-words {
+  display: inline-block;
+  border-color: black ;
+  border-radius: 10%;
   background-color: white;
-  max-width: 500px;
-  min-width: 432px;
-  width: 60%;
-  padding-left: 1em;
-  padding-right: 1em;
+  margin: 2px 2px;
+}
+.reviews-search-features {
+  display: inline-block;
 }
 .reviews-header {
   padding-top: 1em;
@@ -50,14 +102,14 @@ body {
   color: gray;
 }
 .reviews-pictures {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto auto;
   width: 100%;
   height: auto;
 }
 .reviews-pictures img {
   display: block;
-  max-width: 33%;
-  max-height: 95px;
+  max-width: 100%;
   width: auto;
   height: auto;
 }
