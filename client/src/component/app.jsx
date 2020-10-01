@@ -72,11 +72,17 @@ class ReviewApp extends React.Component {
     }
     return arr;
   }
+
+  filterByRatings() {
+    console.log('clicked');
+  }
+
+
   render() {
     let view = this.state.view;
     return (
       <div>
-        <Filters count={this.state.hotelReviews.length}/>
+        <Filters count={this.state.hotelReviews.length} filterByRatings={this.filterByRatings.bind(this)}/>
         <br></br>
         <Search/>
         <br></br>

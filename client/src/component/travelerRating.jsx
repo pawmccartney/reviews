@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TravelerRating = () => (
+const TravelerRating = ({filterByRatings}) => (
   <div className='reviews-selections-rating'>
     <div><b>Traveler rating</b></div>
     <label className='reviews-selections-excellent'>
-      <input type='checkbox'></input>
+      <input onClick={filterByRatings} type='checkbox'></input>
       Excellent
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
