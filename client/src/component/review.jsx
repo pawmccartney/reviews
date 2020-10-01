@@ -35,7 +35,7 @@ const Review = ({currHotelReview, readMore}) => (
       <b>{currHotelReview.reviewInfo.reviewTitle}</b>
       <div>"
         <span id="prev">
-          {currHotelReview.reviewInfo.reviewText.slice(0, 20)}
+          {currHotelReview.reviewInfo.reviewText.slice(0, 100)}
         </span>
         <span id="more">
           {currHotelReview.reviewInfo.reviewText}
@@ -56,7 +56,7 @@ const Review = ({currHotelReview, readMore}) => (
       </div>
       <div className='reviews-body-helpful-share'><div>Helpful</div>   <div>Share</div></div>
     </div>
-    <hr></hr>
+    <hr id='footer'></hr>
     <div className='reviews-footer'>
       <div className='reviews-footer-response'>
         <img className='reviews-responder-profile-pic' src={currHotelReview.responderInfo.responderPicture}></img>
@@ -74,12 +74,12 @@ const Review = ({currHotelReview, readMore}) => (
           </div>
         </div>
       </div>
-      <div id='disclaimer'>
-        <hr></hr>
-        This response is the subjective opinion of the management representative and not of TripAdvisor LLC.
-        <br></br>
-        <br></br>
-      </div>
+    </div>
+    <hr></hr>
+    <div id='disclaimer'>
+      This response is the subjective opinion of the management representative and not of TripAdvisor LLC.
+      <br></br>
+      <br></br>
     </div>
   </div>
 );
