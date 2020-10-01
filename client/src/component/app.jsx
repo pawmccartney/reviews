@@ -73,8 +73,30 @@ class ReviewApp extends React.Component {
     return arr;
   }
 
-  filterByRatings() {
-    console.log('clicked');
+  filterByRatings(event) {
+    //if click checked the box
+    if(event.target.checked) {
+      let newView = [];
+      let currView = this.state.view;
+      let scoreboard = ['Terrible', 'Poor', 'Average', 'Very Good', 'Excellent'];
+      let score = scoreboard.indexOf(event.target.nextSibling.innerHTML) + 1;
+
+      currView.map((post) => {
+        function reducer(total, num) {
+          return total + num;
+        };
+        let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
+        //if the ratings equals the score
+        if (ratings === score) {
+          newView.push(post);
+        }
+      });
+      this.setState({view: newView});
+
+    } else { //if click unchecked the box
+      let allReviews = this.state.hotelReviews;
+      this.setState({view: allReviews});
+    }
   }
 
 
