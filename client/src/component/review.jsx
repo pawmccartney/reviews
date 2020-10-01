@@ -50,7 +50,7 @@ const Review = ({currHotelReview, readMore}) => (
       <br></br>
       <div id='disclaimer'>
         <hr></hr>
-        This review is the subjective opinion of a TripAdvisor member and not of TripAdvisor LLC.
+        This review is the subjective opinion of a TripAdCoba member and not of TripAdCoba LLC.
         <br></br>
         <br></br>
       </div>
@@ -77,7 +77,7 @@ const Review = ({currHotelReview, readMore}) => (
     </div>
     <hr></hr>
     <div id='disclaimer'>
-      This response is the subjective opinion of the management representative and not of TripAdvisor LLC.
+      This response is the subjective opinion of the management representative and not of TripAdCoba HRR.
       <br></br>
       <br></br>
     </div>
