@@ -1,7 +1,7 @@
 {
   "name": "reviews",
   "version": "1.0.0",
-  "description": "Interactive Review Section for a TripAdvisor listing.",
+  "description": "Interactive Review Section for a TripAdCoba listing.",
   "main": "index.js",
   "jest": {
     "verbose": true,
