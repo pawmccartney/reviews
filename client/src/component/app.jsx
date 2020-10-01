@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Review from './review.jsx';
 import Filters from './filters.jsx';
+import Search from './search.jsx';
 import axios from 'axios';
 
 
@@ -40,9 +41,9 @@ class ReviewApp extends React.Component {
     let hotelReviews = this.state.hotelReviews;
     return (
       <div>
-        <Filters className='reviews-filter'/>
+        <Filters/>
         <br></br>
-        <section className='reviews-search'> Search Section</section>
+        <Search/>
         <br></br>
         <div className='reviews-table'>
           {hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this)}/><br></br></div>)}

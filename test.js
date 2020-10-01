@@ -4,7 +4,7 @@ test('sanity check', () => {
   expect(true).toBe(true);
 });
 
-test("clien't get request is met with an array", (done) => {
+test("client's get request is met with an array", (done) => {
   axios.get('http://localhost:4003/reviews')
     .then(result => {
       expect(Array.isArray(result.data)).toBe(true);
