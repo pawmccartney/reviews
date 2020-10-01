@@ -72,6 +72,7 @@ class ReviewApp extends React.Component {
     }
     return arr;
   }
+
   render() {
     let view = this.state.view;
     return (
