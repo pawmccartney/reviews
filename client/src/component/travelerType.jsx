@@ -15,7 +15,7 @@ const TravelerType= () => (
     <br></br>
     <label className='reviews-selections-solo'>
       <input type='checkbox'></input>
-      solo
+      Solo
     </label>
     <br></br>
     <label className='reviews-selections-business'>

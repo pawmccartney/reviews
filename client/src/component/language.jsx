@@ -4,7 +4,7 @@ const Language= () => (
   <div className='reviews-selections-language'>
     <div><b>Language</b></div>
     <label className='reviews-selections-allLanguages'>
-      <input type='radio' name='lang' checked></input>
+      <input type='radio' name='lang' defaultChecked></input>
       All languages
     </label>
     <br></br>

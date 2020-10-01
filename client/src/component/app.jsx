@@ -10,7 +10,8 @@ class ReviewApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hotelReviews: []
+      hotelReviews: [],
+      view: []
     };
   }
 
@@ -18,6 +19,7 @@ class ReviewApp extends React.Component {
     axios.get('/reviews')
       .then(result => {
         this.setState({hotelReviews: result.data});
+        this.setState({view: result.data});
       });
   }
 
@@ -37,23 +39,50 @@ class ReviewApp extends React.Component {
     }
   }
 
-  sort(array) {
-    //each element has element.reviewInfo.reviewDate
-    //use that to compare, greater one ends up front.
+  sort(arr, comparator = (post1, post2) => { return Number(post2) - Number(post1); }) {
+    if (arr.length === 0) {
+      return arr;
+    }
+    let dateNumber = function(date) {
+      let e = new Date(date);
+      let month = e.getMonth().toString();
+      let day = e.getDate().toString();
+      let year = e.getFullYear().toString();
 
-    return array
+      if (month.length < 2) {
+        month = '0' + month;
+      }
+      if (day.length < 2) {
+        day = '0' + day;
+      }
+
+      return [year, month, day].join('');
+    };
+
+    for (var i = 1; i < arr.length; i++) {
+      let hole = i;
+      let replace = arr[i]
+      let post1 = arr[i].props.children[0].props.currHotelReview.reviewInfo.reviewDate;
+      let post2 = arr[i - 1].props.children[0].props.currHotelReview.reviewInfo.reviewDate;
+      while (hole && comparator(dateNumber(post1), dateNumber(post2)) < 0) {
+        arr[hole] = arr[hole-1];
+        hole--;
+      }
+      arr[hole] = replace;
+    }
+    return arr;
   }
 
   render() {
-    let hotelReviews = this.state.hotelReviews;
+    let view = this.state.view;
     return (
       <div>
-        <Filters/>
+        <Filters count={this.state.hotelReviews.length}/>
         <br></br>
         <Search/>
         <br></br>
         <div className='reviews-table'>
-          {this.sort(hotelReviews.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this))}/><br></br></div>)}
+          {this.sort(view.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this)}/><br></br></div>))}
         </div>
       </div>
     )

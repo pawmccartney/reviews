@@ -2,10 +2,10 @@ import React from 'react';
 import Selections from './selections.jsx'
 import Popular from './popular.jsx'
 
-const Filters = () => (
+const Filters = ({count}) => (
   <div className='reviews-filter'>
     <div className='reviews-filters-navbar'>
-      <div className='reviews-filters-navbar-option' id='left'><div>Reviews Icon</div><div>12,345</div>Reviews</div>
+      <div className='reviews-filters-navbar-option' id='left'><div>Reviews Icon</div><div>{count}</div>Reviews</div>
       <div className='reviews-filters-navbar-option'><div>Chat Icon</div><div>1,234</div>Q+A</div>
       <div className='reviews-filters-navbar-option' id='right'><div>LightBulb Icon</div><div>123</div>Room tips</div>
     </div>
