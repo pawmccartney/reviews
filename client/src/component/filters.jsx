@@ -2,7 +2,7 @@ import React from 'react';
 import Selections from './selections.jsx'
 import Popular from './popular.jsx'
 
-const Filters = ({count, filterByRatings}) => (
+const Filters = ({count, filterByRatings, filterByMonth}) => (
   <div className='reviews-filter'>
     <div className='reviews-filters-navbar'>
       <div className='reviews-filters-navbar-option' id='left'><div>Reviews Icon</div><div>{count}</div>Reviews</div>
@@ -18,7 +18,7 @@ const Filters = ({count, filterByRatings}) => (
         </div>
       </div>
       <hr></hr>
-      <Selections filterByRatings = {filterByRatings}/>
+      <Selections filterByRatings={filterByRatings} filterByMonth={filterByMonth}/>
       <br></br>
       <Popular/>
     </div>
