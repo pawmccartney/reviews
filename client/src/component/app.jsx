@@ -12,7 +12,9 @@ class ReviewApp extends React.Component {
     this.state = {
       hotelReviews: [],
       view: [],
-      first: true
+      ratingsFilter: false,
+      monthFilter: false,
+      monthCount: 0
     };
   }
 
@@ -77,66 +79,113 @@ class ReviewApp extends React.Component {
   filterByRatings(event) {
     //test
     let parent = event.target.parentElement.parentElement;
-    let labels = parent.getElementsByTagName('label');
     let allReviews = this.state.hotelReviews;
-    let count = 0;
-    for (let i = 0; i < labels.length; i++) {
-      if (labels[i].children[0].checked) {
-        count++;
+    let currView = this.state.view;
+    let scoreboard = ['Terrible', 'Poor', 'Average', 'Very Good', 'Excellent'];
+    let score = scoreboard.indexOf(event.target.nextSibling.innerHTML) + 1;
+
+    function reducer(total, num) {
+      return total + num;
+    };
+
+    //if click checked the box
+    if(event.target.checked) {
+      if (!this.state.ratingsFilter) {
+        currView = [];
+        this.setState({ratingsFilter: true});
+      }
+      allReviews.map((post) => {
+        let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
+        //if the ratings equals the score
+        if (ratings === score) {
+          currView.push(post);
+        }
+      });
+      this.setState({view: currView});
+    } else { //if click unchecked the box
+      let newView = [];
+      currView.map((post) => {
+        let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
+
+        //if the ratings equals the score
+        if (ratings !== score) {
+          newView.push(post);
+        }
+      });
+      if (newView.length === 0) {
+        this.setState({view: allReviews});
+        this.setState({ratingsFilter: false});
+      } else {
+        this.setState({view: newView});
       }
     }
-
-    // if (count === 0) {
-    //   // this.setState({view: allReviews});
-    // } else {
-      let currView = this.state.view;
-      let scoreboard = ['Terrible', 'Poor', 'Average', 'Very Good', 'Excellent'];
-      let score = scoreboard.indexOf(event.target.nextSibling.innerHTML) + 1;
-
-      function reducer(total, num) {
-        return total + num;
-      };
-
-      //if click checked the box
-      if(event.target.checked) {
-        if (this.state.first) {
-          currView = [];
-          this.setState({first: false});
-        }
-        allReviews.map((post) => {
-          let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
-          //if the ratings equals the score
-          if (ratings === score) {
-            currView.push(post);
-          }
-        });
-        this.setState({view: currView});
-      } else { //if click unchecked the box
-        let newView = [];
-        currView.map((post) => {
-          let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
-
-          //if the ratings equals the score
-          if (ratings !== score) {
-            newView.push(post);
-          }
-        });
-        if (newView.length === 0) {
-          this.setState({view: allReviews});
-          this.setState({first: true});
-        } else {
-          this.setState({view: newView});
-        }
-      }
-    // }
   }
 
+  filterByMonth(event) {
+    let month = event.target.nextSibling.innerHTML;
+
+    let allReviews = this.state.hotelReviews;
+    let currView = this.state.view;
+    let scoreboard = ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let checkCount = this.state.monthCount;
+    let range = month.split('-');
+    range = [scoreboard.indexOf(range[0]) + 1, scoreboard.indexOf(range[1]) + 1];
+
+    function reducer(total, num) {
+      return total + num;
+    };
+
+    //if click checked the box
+    if(event.target.checked) {
+      checkCount++;
+
+      if (!this.state.monthFilter) {
+        currView = [];
+        this.setState({monthFilter: true});
+      }
+      allReviews.map((post) => {
+        //get the date
+        let d = new Date(post.reviewInfo.reviewDate);
+        d = d.getMonth();
+        //if the date is within range
+        if (range[0] <= d && range[1] >= d) {
+          // add it to the currView
+          currView.push(post);
+        }
+        console.log(currView);
+      });
+      this.setState({view: currView});
+      this.setState({monthCount: checkCount});
+    } else { //if click unchecked the box
+      checkCount--;
+      let newView = [];
+      currView.map((post) => {
+        //get the date
+        let d = new Date(post.reviewInfo.reviewDate);
+        d = d.getMonth();
+        //if the date is within range
+        if (!(range[0] <= d && range[1] >= d)) {
+          // add it to the currView
+          newView.push(post);
+        }
+      });
+      this.setState({monthCount: checkCount});
+      console.log('checkCount', checkCount);
+      if (newView.length === 0 && checkCount === 0) {
+        console.log('length is zero');
+        this.setState({view: allReviews});
+        this.setState({monthFilter: false});
+      } else {
+        this.setState({view: newView});
+      }
+    }
+  }
 
   render() {
     let view = this.state.view;
     return (
       <div>
-        <Filters count={this.state.hotelReviews.length} filterByRatings={this.filterByRatings.bind(this)}/>
+        <Filters count={this.state.hotelReviews.length} filterByRatings={this.filterByRatings.bind(this)} filterByMonth={this.filterByMonth.bind(this)}/>
         <br></br>
         <Search/>
         <br></br>

@@ -4,10 +4,10 @@ import TimeOfYear from './timeOfYear.jsx';
 import TravelerType from './travelerType.jsx';
 import Language from './language.jsx';
 
-const Selections = ({filterByRatings}) => (
+const Selections = ({filterByRatings, filterByMonth}) => (
   <div className='reviews-selections'>
     <TravelerRating filterByRatings = {filterByRatings}/>
-    <TimeOfYear/>
+    <TimeOfYear filterByMonth={filterByMonth}/>
     <TravelerType/>
     <Language/>
   </div>
