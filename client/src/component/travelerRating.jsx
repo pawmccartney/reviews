@@ -16,7 +16,7 @@ const TravelerRating = ({filterByRatings}) => (
     <br></br>
     <label className='reviews-selections-veryGood'>
       <input onClick={filterByRatings} type='checkbox'></input>
-      <div className='reviews-selections-rating-score '>Very Googid</div>
+      <div className='reviews-selections-rating-score '>Very Good</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
           <div className='reviews-selections-rating-innerBar'></div>
