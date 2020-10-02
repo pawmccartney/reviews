@@ -1,11 +1,11 @@
 import React from 'react';
 
-const TravelerRating = () => (
+const TravelerRating = ({filterByRatings}) => (
   <div className='reviews-selections-rating'>
     <div><b>Traveler rating</b></div>
     <label className='reviews-selections-excellent'>
-      <input type='checkbox'></input>
-      Excellent
+      <input onClick={filterByRatings} type='checkbox'></input>
+      <div className='reviews-selections-rating-score '>Excellent</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
           <div className='reviews-selections-rating-innerBar'></div>
@@ -16,7 +16,7 @@ const TravelerRating = () => (
     <br></br>
     <label className='reviews-selections-veryGood'>
       <input type='checkbox'></input>
-      Very Good
+      <div className='reviews-selections-rating-score '>Very Good</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
           <div className='reviews-selections-rating-innerBar'></div>
@@ -27,7 +27,7 @@ const TravelerRating = () => (
     <br></br>
     <label className='reviews-selections-average'>
       <input type='checkbox'></input>
-      Avegage
+      <div className='reviews-selections-rating-score '>Average</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
           <div className='reviews-selections-rating-innerBar'></div>
@@ -38,7 +38,7 @@ const TravelerRating = () => (
     <br></br>
     <label className='reviews-selections-poor'>
       <input type='checkbox'></input>
-      Poor
+      <div className='reviews-selections-rating-score '>Poor</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
           <div className='reviews-selections-rating-innerBar'></div>
@@ -49,7 +49,7 @@ const TravelerRating = () => (
     <br></br>
     <label className='reviews-selections-terrible'>
       <input type='checkbox'></input>
-      Terrible
+      <div className='reviews-selections-rating-score '>Terrible</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
           <div className='reviews-selections-rating-innerBar'></div>
