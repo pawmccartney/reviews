@@ -15,7 +15,7 @@ const TravelerRating = ({filterByRatings}) => (
     </label>
     <br></br>
     <label className='reviews-selections-veryGood'>
-      <input type='checkbox'></input>
+      <input onClick={filterByRatings} type='checkbox'></input>
       <div className='reviews-selections-rating-score '>Very Good</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
@@ -26,7 +26,7 @@ const TravelerRating = ({filterByRatings}) => (
     </label>
     <br></br>
     <label className='reviews-selections-average'>
-      <input type='checkbox'></input>
+      <input onClick={filterByRatings} type='checkbox'></input>
       <div className='reviews-selections-rating-score '>Average</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
@@ -37,7 +37,7 @@ const TravelerRating = ({filterByRatings}) => (
     </label>
     <br></br>
     <label className='reviews-selections-poor'>
-      <input type='checkbox'></input>
+      <input onClick={filterByRatings} type='checkbox'></input>
       <div className='reviews-selections-rating-score '>Poor</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>
@@ -48,7 +48,7 @@ const TravelerRating = ({filterByRatings}) => (
     </label>
     <br></br>
     <label className='reviews-selections-terrible'>
-      <input type='checkbox'></input>
+      <input onClick={filterByRatings} type='checkbox'></input>
       <div className='reviews-selections-rating-score '>Terrible</div>
       <div className='reviews-selections-rating-bars'>
         <div className='reviews-selections-rating-outerBar'>

@@ -11,7 +11,8 @@ class ReviewApp extends React.Component {
     super(props);
     this.state = {
       hotelReviews: [],
-      view: []
+      view: [],
+      first: true
     };
   }
 
@@ -74,29 +75,60 @@ class ReviewApp extends React.Component {
   }
 
   filterByRatings(event) {
-    //if click checked the box
-    if(event.target.checked) {
-      let newView = [];
+    //test
+    let parent = event.target.parentElement.parentElement;
+    let labels = parent.getElementsByTagName('label');
+    let allReviews = this.state.hotelReviews;
+    let count = 0;
+    for (let i = 0; i < labels.length; i++) {
+      if (labels[i].children[0].checked) {
+        count++;
+      }
+    }
+
+    // if (count === 0) {
+    //   // this.setState({view: allReviews});
+    // } else {
       let currView = this.state.view;
       let scoreboard = ['Terrible', 'Poor', 'Average', 'Very Good', 'Excellent'];
       let score = scoreboard.indexOf(event.target.nextSibling.innerHTML) + 1;
 
-      currView.map((post) => {
-        function reducer(total, num) {
-          return total + num;
-        };
-        let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
-        //if the ratings equals the score
-        if (ratings === score) {
-          newView.push(post);
-        }
-      });
-      this.setState({view: newView});
+      function reducer(total, num) {
+        return total + num;
+      };
 
-    } else { //if click unchecked the box
-      let allReviews = this.state.hotelReviews;
-      this.setState({view: allReviews});
-    }
+      //if click checked the box
+      if(event.target.checked) {
+        if (this.state.first) {
+          currView = [];
+          this.setState({first: false});
+        }
+        allReviews.map((post) => {
+          let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
+          //if the ratings equals the score
+          if (ratings === score) {
+            currView.push(post);
+          }
+        });
+        this.setState({view: currView});
+      } else { //if click unchecked the box
+        let newView = [];
+        currView.map((post) => {
+          let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
+
+          //if the ratings equals the score
+          if (ratings !== score) {
+            newView.push(post);
+          }
+        });
+        if (newView.length === 0) {
+          this.setState({view: allReviews});
+          this.setState({first: true});
+        } else {
+          this.setState({view: newView});
+        }
+      }
+    // }
   }
 
 
