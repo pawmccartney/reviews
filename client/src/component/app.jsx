@@ -12,7 +12,8 @@ class ReviewApp extends React.Component {
     this.state = {
       hotelReviews: [],
       view: [],
-      ratingsFilter: false,
+      ratingsFilter: [],
+      ratingsCount: 0,
       monthFilter: false,
       monthCount: 0
     };
@@ -76,8 +77,34 @@ class ReviewApp extends React.Component {
     return arr;
   }
 
+
+  unique(arr) {
+    let newArr = [];
+    let dict = {};
+    let restored = [];
+    for (let i = 0; i < arr.length; i++) {
+        newArr.push(JSON.stringify(arr[i]));
+    }
+
+    newArr.forEach((element) => {
+        if (!dict[element]) {
+            dict[element] = true;
+        }
+    })
+
+    let keys= Object.keys(dict);
+
+    keys.forEach((key) => {
+        restored.push(JSON.parse(key));
+    });
+
+    return restored;
+  }
+
   filterByRatings(event) {
-    //test
+    let totalFilters = [].concat(this.state.ratingsFilter); //change later to concat through every filters
+    let currFilter = this.state.ratingsFilter;
+    let count = this.state.ratingsCount;
     let parent = event.target.parentElement.parentElement;
     let allReviews = this.state.hotelReviews;
     let currView = this.state.view;
@@ -90,21 +117,28 @@ class ReviewApp extends React.Component {
 
     //if click checked the box
     if(event.target.checked) {
-      if (!this.state.ratingsFilter) {
-        currView = [];
-        this.setState({ratingsFilter: true});
-      }
+      count++;
+      // if (totalFilters.length === 0) {
+      //   currView = [];
+      //   // this.setState({ratingsFilter: true});
+      // }
+      let newlyFiltered = [];
       allReviews.map((post) => {
         let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
         //if the ratings equals the score
         if (ratings === score) {
-          currView.push(post);
+          newlyFiltered.push(post);
         }
       });
-      this.setState({view: currView});
+      let filtered = newlyFiltered.concat(currFilter);
+      totalFilters = [].concat(filtered);
+      let restored = this.unique(totalFilters);
+      this.setState({view: restored, ratingsFilter: filtered, ratingsCount: count});
+
     } else { //if click unchecked the box
+      count--;
       let newView = [];
-      currView.map((post) => {
+      currFilter.map((post) => {
         let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
 
         //if the ratings equals the score
@@ -112,11 +146,15 @@ class ReviewApp extends React.Component {
           newView.push(post);
         }
       });
-      if (newView.length === 0) {
+      this.setState({ratingsFilter: newView, ratingsCount: count});
+      totalFilters = [].concat(newView);
+
+      if (totalFilters.length === 0 && count === 0) {
         this.setState({view: allReviews});
-        this.setState({ratingsFilter: false});
+        // this.setState({ratingsFilter: false});
       } else {
-        this.setState({view: newView});
+        let restored = this.unique(totalFilters);
+        this.setState({view: restored});
       }
     }
   }
