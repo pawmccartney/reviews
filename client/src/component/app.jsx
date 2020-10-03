@@ -170,13 +170,12 @@ class ReviewApp extends React.Component {
 
       if (newView.length === 0 && ratingsCount === 0 && !restored[1]) {
         this.setState({view: allReviews, ratingsFilter: allReviews});
-        console.log('loc1');
         console.log('ratingsFilter', allReviews);
         console.log('monthFilter', this.state.monthFilter);
         console.log('typeFilter', this.state.typeFilter);
       } else {
         this.setState({view: restored[0], ratingsFilter: newView});
-        console.log('loc2');
+        console.log('loc2', restored);
         console.log('ratingsFilter', newView);
         console.log('monthFilter', this.state.monthFilter);
         console.log('typeFilter', this.state.typeFilter);
@@ -247,12 +246,12 @@ class ReviewApp extends React.Component {
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
 
       if (newView.length === 0 && monthCount === 0 && !restored[1]) {
-        this.setState({view: allReviews, monthFilter: allReviews});
+        this.setState({view: allReviews, ratingsFilter: allReviews});
         console.log('ratingsFilter', this.state.ratingsFilter);
         console.log('typeFilter', this.state.typeFilter);
         console.log('monthFilter', allReviews);
       } else {
-        this.setState({view: restored[0], monthFilter: newView});
+        this.setState({view: restored[0], ratingsFilter: newView});
         console.log('ratingsFilter', this.state.ratingsFilter);
         console.log('typeFilter', this.state.typeFilter);
         console.log('monthFilter', newView);
@@ -302,7 +301,7 @@ class ReviewApp extends React.Component {
       let newView = [];
       currFilter.map((post) => {
         //if the type matches
-        if (post.reviewInfo.reviewTripType === tType) {
+        if (post.reviewInfo.reviewTripType !== tType) {
           // add it to the newlyFiltered
           newView.push(post);
         }
@@ -317,12 +316,12 @@ class ReviewApp extends React.Component {
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
 
       if (newView.length === 0 && typeCount === 0 && !restored[1]) {
-        this.setState({view: allReviews, monthFilter: allReviews});
+        this.setState({view: allReviews, typeFilter: allReviews});
         console.log('ratingsFilter', this.state.ratingsFilter);
         console.log('typeFilter', allReviews);
         console.log('monthFilter', this.state.monthFilter);
       } else {
-        this.setState({view: restored[0], monthFilter: newView});
+        this.setState({view: restored[0], typeFilter: newView});
         console.log('ratingsFilter', this.state.ratingsFilter);
         console.log('typeFilter', newView);
         console.log('monthFilter', this.state.monthFilter);
