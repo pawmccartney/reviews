@@ -54,7 +54,7 @@ body {
 .reviews-selections-rating-count {
   display: inline-block;
 }
-.reviews-selections-rating-bars, .reviews-selections-rating-score, .reviews-selections-review-month {
+.reviews-selections-rating-bars, .reviews-selections-rating-score, .reviews-selections-review-month, .reviews-selections-type {
   display: inline-block;
 }
 .reviews-selections-rating-outerBar {

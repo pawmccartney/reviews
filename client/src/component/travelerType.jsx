@@ -5,27 +5,27 @@ const TravelerType= ({filterByType}) => (
     <div><b>Traveler type</b></div>
     <label className='reviews-selections-families'>
       <input type='checkbox' onClick={filterByType}></input>
-      Families
+      <div className='reviews-selections-type'>Families</div>
     </label>
     <br></br>
     <label className='reviews-selections-couples'>
-    <input type='checkbox' onClick={filterByType}></input>
-      Couples
+      <input type='checkbox' onClick={filterByType}></input>
+      <div className='reviews-selections-type'>Couples</div>
     </label>
     <br></br>
     <label className='reviews-selections-solo'>
       <input type='checkbox' onClick={filterByType}></input>
-      Solo
+      <div className='reviews-selections-type'>Solo</div>
     </label>
     <br></br>
     <label className='reviews-selections-business'>
       <input type='checkbox' onClick={filterByType}></input>
-      Business
+      <div className='reviews-selections-type'>Business</div>
     </label>
     <br></br>
     <label className='reviews-selections-friends'>
       <input type='checkbox' onClick={filterByType}></input>
-      Friends
+      <div className='reviews-selections-type'>Friends</div>
     </label>
   </div>
 );
