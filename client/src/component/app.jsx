@@ -13,8 +13,8 @@ class ReviewApp extends React.Component {
       hotelReviews: [],
       view: [],
       ratingsFilter: [],
+      monthFilter: [],
       ratingsCount: 0,
-      monthFilter: false,
       monthCount: 0
     };
   }
@@ -22,8 +22,7 @@ class ReviewApp extends React.Component {
   componentDidMount() {
     axios.get('/reviews')
       .then(result => {
-        this.setState({hotelReviews: result.data});
-        this.setState({view: result.data});
+        this.setState({hotelReviews: result.data, view: result.data, ratingsFilter: result.data, monthFilter: result.data});
       });
   }
 
@@ -78,36 +77,45 @@ class ReviewApp extends React.Component {
   }
 
 
-  unique(arr) {
+  duplicates(arr, ratingsCount, monthCount) {
+    console.log('totalFilters', arr);
+
+    if (ratingsCount === 0 && monthCount === 0) {
+      console.log('zero zero');
+      return this.state.hotelReviews;
+    }
+
     let newArr = [];
     let dict = {};
     let restored = [];
+    let doubles = [];
+
     for (let i = 0; i < arr.length; i++) {
         newArr.push(JSON.stringify(arr[i]));
     }
 
     newArr.forEach((element) => {
-        if (!dict[element]) {
-            dict[element] = true;
+      if (dict[element]) {
+        if(dict[element] === 'one') {
+          doubles.push(element);
+          dict[element] = 'more';
         }
-    })
-
-    let keys= Object.keys(dict);
-
-    keys.forEach((key) => {
-        restored.push(JSON.parse(key));
+      } else {
+        dict[element] = 'one';
+      }
     });
 
+    doubles.forEach((double) => {
+        restored.push(JSON.parse(double));
+    });
     return restored;
   }
 
   filterByRatings(event) {
-    let totalFilters = [].concat(this.state.ratingsFilter); //change later to concat through every filters
     let currFilter = this.state.ratingsFilter;
-    let count = this.state.ratingsCount;
-    let parent = event.target.parentElement.parentElement;
+    let monthCount = this.state.monthCount;
+    let ratingsCount = this.state.ratingsCount;
     let allReviews = this.state.hotelReviews;
-    let currView = this.state.view;
     let scoreboard = ['Terrible', 'Poor', 'Average', 'Very Good', 'Excellent'];
     let score = scoreboard.indexOf(event.target.nextSibling.innerHTML) + 1;
 
@@ -117,11 +125,12 @@ class ReviewApp extends React.Component {
 
     //if click checked the box
     if(event.target.checked) {
-      count++;
-      // if (totalFilters.length === 0) {
-      //   currView = [];
-      //   // this.setState({ratingsFilter: true});
-      // }
+      ratingsCount++;
+
+      if (ratingsCount === 1) {
+        currFilter = [];
+      }
+
       let newlyFiltered = [];
       allReviews.map((post) => {
         let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
@@ -131,30 +140,37 @@ class ReviewApp extends React.Component {
         }
       });
       let filtered = newlyFiltered.concat(currFilter);
-      totalFilters = [].concat(filtered);
-      let restored = this.unique(totalFilters);
-      this.setState({view: restored, ratingsFilter: filtered, ratingsCount: count});
+      let totalFilters = (this.state.monthFilter).concat(filtered);
+      this.setState({ratingsCount: ratingsCount});
+      let restored = this.duplicates(totalFilters, ratingsCount, monthCount);
+      this.setState({view: restored, ratingsFilter: filtered});
+
+      console.log('ratingsFilter', filtered);
+      console.log('MonthFilter', this.state.monthFilter);
 
     } else { //if click unchecked the box
-      count--;
+      ratingsCount--;
       let newView = [];
       currFilter.map((post) => {
         let ratings = (post.reviewInfo.reviewRatings).reduce(reducer);
-
         //if the ratings equals the score
         if (ratings !== score) {
           newView.push(post);
         }
       });
-      this.setState({ratingsFilter: newView, ratingsCount: count});
-      totalFilters = [].concat(newView);
 
-      if (totalFilters.length === 0 && count === 0) {
-        this.setState({view: allReviews});
-        // this.setState({ratingsFilter: false});
+      this.setState({ratingsCount: ratingsCount});
+      let totalFilters = (this.state.monthFilter).concat(newView);
+      let restored = this.duplicates(totalFilters, ratingsCount, monthCount);
+
+      if (newView.length === 0 && ratingsCount === 0) {
+        this.setState({view: allReviews, ratingsFilter: allReviews});
+        console.log('ratingsFilter', allReviews);
+        console.log('MonthFilter', this.state.monthFilter);
       } else {
-        let restored = this.unique(totalFilters);
-        this.setState({view: restored});
+        this.setState({view: restored, ratingsFilter: newView});
+        console.log('ratingsFilter', newView);
+        console.log('MonthFilter', this.state.monthFilter);
       }
     }
   }
@@ -162,10 +178,11 @@ class ReviewApp extends React.Component {
   filterByMonth(event) {
     let month = event.target.nextSibling.innerHTML;
 
+    let currFilter = this.state.monthFilter;
+    let monthCount = this.state.monthCount;
+    let ratingsCount = this.state.ratingsCount;
     let allReviews = this.state.hotelReviews;
-    let currView = this.state.view;
     let scoreboard = ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    let checkCount = this.state.monthCount;
     let range = month.split('-');
     range = [scoreboard.indexOf(range[0]) + 1, scoreboard.indexOf(range[1]) + 1];
 
@@ -175,12 +192,13 @@ class ReviewApp extends React.Component {
 
     //if click checked the box
     if(event.target.checked) {
-      checkCount++;
+      monthCount++;
 
-      if (!this.state.monthFilter) {
-        currView = [];
-        this.setState({monthFilter: true});
+      if (monthCount === 1) {
+        currFilter = [];
       }
+
+      let newlyFiltered = [];
       allReviews.map((post) => {
         //get the date
         let d = new Date(post.reviewInfo.reviewDate);
@@ -188,16 +206,21 @@ class ReviewApp extends React.Component {
         //if the date is within range
         if (range[0] <= d && range[1] >= d) {
           // add it to the currView
-          currView.push(post);
+          newlyFiltered.push(post);
         }
-        console.log(currView);
       });
-      this.setState({view: currView});
-      this.setState({monthCount: checkCount});
+      let filtered = newlyFiltered.concat(currFilter);
+      let totalFilters = (this.state.ratingsFilter).concat(filtered);
+      this.setState({monthCount: monthCount});
+      let restored = this.duplicates(totalFilters, ratingsCount, monthCount);
+      this.setState({view: restored, monthFilter: filtered});
+
+      console.log('ratingsFilter', this.state.ratingsFilter);
+      console.log('MonthFilter', filtered);
     } else { //if click unchecked the box
-      checkCount--;
+      monthCount--;
       let newView = [];
-      currView.map((post) => {
+      currFilter.map((post) => {
         //get the date
         let d = new Date(post.reviewInfo.reviewDate);
         d = d.getMonth();
@@ -207,14 +230,19 @@ class ReviewApp extends React.Component {
           newView.push(post);
         }
       });
-      this.setState({monthCount: checkCount});
-      console.log('checkCount', checkCount);
-      if (newView.length === 0 && checkCount === 0) {
-        console.log('length is zero');
-        this.setState({view: allReviews});
-        this.setState({monthFilter: false});
+
+      this.setState({monthCount: monthCount});
+      let totalFilters = (this.state.ratingsFilter).concat(newView);
+      let restored = this.duplicates(totalFilters, ratingsCount, monthCount);
+
+      if (newView.length === 0 && monthCount === 0) {
+        this.setState({view: allReviews, monthFilter: allReviews});
+        console.log('ratingsFilter', this.state.ratingsFilter);
+        console.log('MonthFilter', allReviews);
       } else {
-        this.setState({view: newView});
+        this.setState({view: restored, monthFilter: newView});
+        console.log('ratingsFilter', this.state.ratingsFilter);
+        console.log('MonthFilter', newView);
       }
     }
   }
