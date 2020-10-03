@@ -41,8 +41,9 @@ const Review = ({currHotelReview, readMore}) => (
           {currHotelReview.reviewInfo.reviewText}
         </span>
         "
-        <button onClick={readMore} id="readMore">Read more</button>
       </div>
+      <button onClick={readMore} id="readMore">Read more</button>
+      <br></br>
       <br></br>
       <div><b>Date of stay</b>: {moment(currHotelReview.reviewInfo.reviewDate).format('MMM Do')}</div>
       <br></br>

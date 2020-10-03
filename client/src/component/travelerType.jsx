@@ -3,6 +3,7 @@ import React from 'react';
 const TravelerType= ({filterByType}) => (
   <div className='reviews-selections-travelerType'>
     <div><b>Traveler type</b></div>
+    <br></br>
     <label className='reviews-selections-families'>
       <input type='checkbox' onClick={filterByType}></input>
       <div className='reviews-selections-type'>Families</div>

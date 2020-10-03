@@ -29,18 +29,18 @@ class ReviewApp extends React.Component {
   }
 
   readMore(event) {
-    let prev = event.target.parentElement.children[0]
-    let moreText = event.target.parentElement.children[1];
+    let prev = document.getElementById('prev');
+    let moreText = document.getElementById('more');
     let readMore = event.target;
 
-    if (prev.style.display === "none") {
-      prev.style.display = "inline";
-      readMore.innerHTML = "Read more";
-      moreText.style.display = "none";
+    if (prev.style.display === 'none') {
+      prev.style.display = 'inline';
+      readMore.innerHTML = 'Read more';
+      moreText.style.display = 'none';
     } else {
-      prev.style.display = "none";
-      readMore.innerHTML = "Read less";
-      moreText.style.display = "inline";
+      prev.style.display = 'none';
+      readMore.innerHTML = 'Read less';
+      moreText.style.display = 'inline';
     }
   }
 

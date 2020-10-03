@@ -3,6 +3,7 @@ import React from 'react';
 const TimeOfYear= ({filterByMonth}) => (
   <div className='reviews-selections-date'>
     <div><b>Time of year</b></div>
+    <br></br>
     <label className='reviews-selections-mar_may'>
       <input onClick={filterByMonth} type='checkbox'></input>
       <div className='reviews-selections-review-month'>Mar-May</div>
