@@ -251,12 +251,89 @@ class ReviewApp extends React.Component {
       }
     }
   }
+  filterByMonth(event) {
+    let month = event.target.nextSibling.innerHTML;
+
+    let currFilter = this.state.monthFilter;
+    let monthCount = this.state.monthCount;
+    let ratingsCount = this.state.ratingsCount;
+    let typeCount = this.state.typeCount;
+    let allReviews = this.state.hotelReviews;
+    let scoreboard = ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let range = month.split('-');
+    range = [scoreboard.indexOf(range[0]) + 1, scoreboard.indexOf(range[1]) + 1];
+
+    function reducer(total, num) {
+      return total + num;
+    };
+
+    //if click checked the box
+    if(event.target.checked) {
+      monthCount++;
+
+      if (monthCount === 1) {
+        currFilter = [];
+      }
+
+      let newlyFiltered = [];
+      allReviews.map((post) => {
+        //get the date
+        let d = new Date(post.reviewInfo.reviewDate);
+        d = d.getMonth();
+        //if the date is within range
+        if (range[0] <= d && range[1] >= d) {
+          // add it to the currView
+          newlyFiltered.push(post);
+        }
+      });
+      let filtered = newlyFiltered.concat(currFilter);
+      let totalFilters = (this.state.ratingsFilter).concat(filtered);
+      this.setState({monthCount: monthCount});
+      let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
+      this.setState({view: restored[0], monthFilter: filtered});
+
+      console.log('ratingsFilter', this.state.ratingsFilter);
+      console.log('MonthFilter', filtered);
+
+    } else { //if click unchecked the box
+      monthCount--;
+      let newView = [];
+      currFilter.map((post) => {
+        //get the date
+        let d = new Date(post.reviewInfo.reviewDate);
+        d = d.getMonth();
+        //if the date is within range
+        if (!(range[0] <= d && range[1] >= d)) {
+          // add it to the currView
+          newView.push(post);
+        }
+      });
+
+      this.setState({monthCount: monthCount});
+      let totalFilters = (this.state.ratingsFilter).concat(newView);
+      let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
+
+      if (newView.length === 0 && monthCount === 0 && !restored[1]) {
+        this.setState({view: allReviews, monthFilter: allReviews});
+        console.log('ratingsFilter', this.state.ratingsFilter);
+        console.log('MonthFilter', allReviews);
+      } else {
+        this.setState({view: restored[0], monthFilter: newView});
+        console.log('ratingsFilter', this.state.ratingsFilter);
+        console.log('MonthFilter', newView);
+      }
+    }
+  }
+
+  filterByType(event) {
+    console.log(event.target.parentElement);
+  }
 
   render() {
     let view = this.state.view;
     return (
       <div>
-        <Filters count={this.state.hotelReviews.length} filterByRatings={this.filterByRatings.bind(this)} filterByMonth={this.filterByMonth.bind(this)}/>
+        <Filters count={this.state.hotelReviews.length} filterByRatings={this.filterByRatings.bind(this)} filterByMonth={this.filterByMonth.bind(this)} filterByType={this.filterByType.bind(this)}/>
         <br></br>
         <Search/>
         <br></br>
