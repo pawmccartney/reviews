@@ -80,8 +80,6 @@ class ReviewApp extends React.Component {
 
 
   duplicates(arr, ratingsCount, monthCount, typeCount) {
-    console.log('totalFilters', arr);
-
     if (ratingsCount === 0 && monthCount === 0 && typeCount === 0) {
       console.log('zero zero');
       return [this.state.hotelReviews, false];
@@ -90,25 +88,25 @@ class ReviewApp extends React.Component {
     let newArr = [];
     let dict = {};
     let restored = [];
-    let doubles = [];
+    let triples = [];
 
     for (let i = 0; i < arr.length; i++) {
         newArr.push(JSON.stringify(arr[i]));
     }
-
     newArr.forEach((element) => {
       if (dict[element]) {
-        if(dict[element] === 'one') {
-          doubles.push(element);
-          dict[element] = 'more';
+        dict[element]++;
+        if(dict[element] === 3) {
+          dict[element]++;
+          triples.push(element);
         }
       } else {
-        dict[element] = 'one';
+        dict[element] = 1;
       }
     });
 
-    doubles.forEach((double) => {
-        restored.push(JSON.parse(double));
+    triples.forEach((triple) => {
+        restored.push(JSON.parse(triple));
     });
     return [restored, true];
   }
@@ -143,7 +141,7 @@ class ReviewApp extends React.Component {
         }
       });
       let filtered = newlyFiltered.concat(currFilter);
-      let totalFilters = (this.state.monthFilter).concat(filtered);
+      let totalFilters = (filtered).concat(this.state.monthFilter, this.state.typeFilter);
       this.setState({ratingsCount: ratingsCount});
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
       this.setState({view: restored[0], ratingsFilter: filtered});
@@ -164,18 +162,23 @@ class ReviewApp extends React.Component {
       });
 
       this.setState({ratingsCount: ratingsCount});
-      let totalFilters = (this.state.monthFilter).concat(newView);
+      if (ratingsCount === 0) {
+        newView = allReviews;
+      }
+      let totalFilters = (newView).concat(this.state.monthFilter, this.state.typeFilter);
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
 
-      if (newView.length === 0 && ratingsCount === 0 && restored[1]) {
+      if (newView.length === 0 && ratingsCount === 0 && !restored[1]) {
         this.setState({view: allReviews, ratingsFilter: allReviews});
+        console.log('loc1');
         console.log('ratingsFilter', allReviews);
-        console.log('MonthFilter', this.state.monthFilter);
+        console.log('monthFilter', this.state.monthFilter);
         console.log('typeFilter', this.state.typeFilter);
       } else {
         this.setState({view: restored[0], ratingsFilter: newView});
+        console.log('loc2');
         console.log('ratingsFilter', newView);
-        console.log('MonthFilter', this.state.monthFilter);
+        console.log('monthFilter', this.state.monthFilter);
         console.log('typeFilter', this.state.typeFilter);
       }
     }
@@ -213,14 +216,14 @@ class ReviewApp extends React.Component {
         }
       });
       let filtered = newlyFiltered.concat(currFilter);
-      let totalFilters = (this.state.ratingsFilter).concat(filtered);
+      let totalFilters = (filtered).concat(this.state.ratingsFilter, this.state.typeFilter);
       this.setState({monthCount: monthCount});
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
       this.setState({view: restored[0], monthFilter: filtered});
 
       console.log('ratingsFilter', this.state.ratingsFilter);
       console.log('typeFilter', this.state.typeFilter);
-      console.log('MonthFilter', filtered);
+      console.log('monthFilter', filtered);
 
     } else { //if click unchecked the box
       monthCount--;
@@ -237,19 +240,22 @@ class ReviewApp extends React.Component {
       });
 
       this.setState({monthCount: monthCount});
-      let totalFilters = (this.state.ratingsFilter).concat(newView);
+      if (monthCount === 0) {
+        newView = allReviews;
+      }
+      let totalFilters = (newView).concat(this.state.ratingsFilter, this.state.typeFilter);
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
 
       if (newView.length === 0 && monthCount === 0 && !restored[1]) {
         this.setState({view: allReviews, monthFilter: allReviews});
         console.log('ratingsFilter', this.state.ratingsFilter);
         console.log('typeFilter', this.state.typeFilter);
-        console.log('MonthFilter', allReviews);
+        console.log('monthFilter', allReviews);
       } else {
         this.setState({view: restored[0], monthFilter: newView});
         console.log('ratingsFilter', this.state.ratingsFilter);
         console.log('typeFilter', this.state.typeFilter);
-        console.log('MonthFilter', newView);
+        console.log('monthFilter', newView);
       }
     }
   }
@@ -279,15 +285,17 @@ class ReviewApp extends React.Component {
           newlyFiltered.push(post);
         }
       });
+      console.log('newlyFiltered: ', newlyFiltered);
       let filtered = newlyFiltered.concat(currFilter);
-      let totalFilters = (this.state.ratingsFilter).concat(filtered);
+      console.log('filtered: ', filtered);
+      let totalFilters = (filtered).concat(this.state.ratingsFilter, this.state.monthFilter);
       this.setState({typeCount: typeCount});
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
-      this.setState({view: restored[0], monthFilter: filtered});
+      this.setState({view: restored[0], typeFilter: filtered});
 
       console.log('ratingsFilter', this.state.ratingsFilter);
-      console.log('typeFilter', this.state.typeFilter);
-      console.log('monthFilter', filtered);
+      console.log('typeFilter', filtered);
+      console.log('monthFilter', this.state.monthFilter);
 
     } else { //if click unchecked the box
       typeCount--;
@@ -301,19 +309,23 @@ class ReviewApp extends React.Component {
       });
 
       this.setState({typeCount: typeCount});
-      let totalFilters = (this.state.ratingsFilter).concat(newView);
+      if (typeCount === 0) {
+        newView = allReviews;
+      }
+      console.log('typeCount: ', typeCount);
+      let totalFilters = (newView).concat(this.state.ratingsFilter, this.state.monthFilter);
       let restored = this.duplicates(totalFilters, ratingsCount, monthCount, typeCount);
 
       if (newView.length === 0 && typeCount === 0 && !restored[1]) {
         this.setState({view: allReviews, monthFilter: allReviews});
         console.log('ratingsFilter', this.state.ratingsFilter);
-        console.log('typeFilter', this.state.typeFilter);
-        console.log('MonthFilter', allReviews);
+        console.log('typeFilter', allReviews);
+        console.log('monthFilter', this.state.monthFilter);
       } else {
         this.setState({view: restored[0], monthFilter: newView});
         console.log('ratingsFilter', this.state.ratingsFilter);
-        console.log('typeFilter', this.state.typeFilter);
-        console.log('MonthFilter', newView);
+        console.log('typeFilter', newView);
+        console.log('monthFilter', this.state.monthFilter);
       }
     }
   }
