@@ -11,10 +11,12 @@ const Filters = ({count, filterByRatings, filterByMonth, filterByType}) => (
     </div>
     <div className='reviews-filters-main'>
       <div className='reviews-filter-title'>
-        <h1 className='reviews-filter-title-parts'>Reviews</h1>
+        <div className='reviews-filter-title-parts'>Reviews</div>
         <div className='reviews-filter-title-buttons'>
-          <button id='reviewButton'>Write a review</button>
-          <button id='reviewButton'>arrow</button>
+          <div>
+            <button id='reviewButton'>Write a review</button>
+            <button id='reviewButton'>{'\u2bc6'}</button>
+          </div>
         </div>
       </div>
       <hr></hr>

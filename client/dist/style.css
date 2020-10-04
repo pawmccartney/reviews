@@ -1,15 +1,15 @@
 .reviews-container {
-  width: 60%;
+  width: 70%;
   min-width: 400px;
 }
 body {
-  background-color: beige;
+  background-color: #F5F5F5;
 }
 .reviews-search {
   background-color: white;
   max-width: 800px;
   min-width: 432px;
-  width: 60%;
+  width: 70%;
   padding-left: 1em;
   padding-right: 1em;
 }
@@ -17,7 +17,7 @@ body {
   background-color: white;
   max-width: 832px;
   min-width: 464px;
-  width: calc(60% + 2em);
+  width: calc(70% + 2em);
   border: 1px solid lightgray;
 }
 .reviews-filters-navbar {
@@ -26,23 +26,42 @@ body {
   text-align: center;
   padding-left: 0;
 }
+.reviews-filters-navbar :first-child {
+  border-bottom-width: 0px;
+  border-top-color: black;
+  border-top-width: thick;
+}
 .reviews-filters-navbar-option {
   padding-top: 2em;
   text-align: center;
   font-weight: bold;
   border: 1px solid lightgray;
+  cursor: pointer;
+}
+.reviews-filter-title {
+  height: 16px;
+  padding: 2em 0;
 }
 .reviews-filter-title-parts {
-  display: inline-block;
+  float: left;
+  font-size: 30px;
+  font-weight: bold;
 }
 .reviews-filter-title-buttons {
   float: right;
+  display:flex;
 }
 #reviewButton {
-  color: white;
   background-color: black;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  height: 36px;
+  margin: none;
+  padding: none;
+  position: relative;
   vertical-align: middle;
-  margin-top: 25%;
+  cursor: pointer;
 }
 .reviews-filters-main {
   padding: 0em 1em;
@@ -51,10 +70,14 @@ body {
   display: grid;
   grid-template-columns: 4fr 2fr 2fr 2fr;
 }
-.reviews-selections-rating-count {
-  display: inline-block;
+.reviews-selections-container {
+  display:flex;
 }
-.reviews-selections-rating-bars, .reviews-selections-rating-score, .reviews-selections-review-month, .reviews-selections-type {
+.reviews-selections-rating-count, .reviews-selections-rating-outerBar {
+  display: inline-block;
+  margin-left: 10px;
+}
+.reviews-selections-rating-score, .reviews-selections-review-month, .reviews-selections-type {
   display: inline-block;
 }
 .reviews-selections-rating-outerBar {
@@ -70,22 +93,43 @@ body {
   background-color: black;
 }
 
+.reviews-selections-rating-options, .reviews-selections-rating-options > input {
+  cursor: pointer;
+}
+.reviews-selections-travelerType-options, .reviews-selections-travelerType-options > input {
+  cursor: pointer;
+}
+.reviews-selections-month-options, .reviews-selections-month-options > input {
+  cursor: pointer;
+}
 .reviews-filter-popular-words {
   display: inline-block;
   border-color: black ;
-  border-radius: 10%;
+  border-radius: 8%;
   background-color: white;
   margin: 2px 2px;
+  height: 30px;
 }
-.reviews-search-features {
-  display: inline-block;
+.reviews-search {
+  display: flex;
+}
+.reviews-search-icon {
+  vertical-align: middle;
+  line-height: 24px;
+  margin-top: 1%;
+  padding-right:1em;
+}
+.reviews-search-bar {
+  border: none;
+  width: 100%;
+  height: 37px;
 }
 
 .reviews-review {
   background-color: white;
   max-width: 832px;
   min-width: 464px;
-  width: calc(60% + 2em);
+  width: calc(70% + 2em);
 }
 .reviews-header, .reviews-body, .reviews-footer {
   background-color: white;

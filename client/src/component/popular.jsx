@@ -3,6 +3,8 @@ import React from 'react';
 const PopularMentions = () => (
   <div>
     <b>Popular mentions</b>
+    <br></br>
+    <br></br>
     <div>
       <button className='reviews-filter-popular-words' id='allReviews'>All reviews</button>
       <button className='reviews-filter-popular-words'>fish tacos</button>
@@ -26,6 +28,8 @@ const PopularMentions = () => (
       <button className='reviews-filter-popular-words'>dress code</button>
       <button className='reviews-filter-popular-words'>great resort</button>
     </div>
+    <br></br>
+    <br></br>
   </div>
 );
 
