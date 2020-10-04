@@ -42,7 +42,7 @@ const Review = ({currHotelReview, readMore}) => (
         </span>
         "
       </div>
-      <button onClick={readMore} id="readMore">Read more</button>
+      <button onClick={readMore} id="readMore">Read more{'\u2bc6'}</button>
       <br></br>
       <br></br>
       <div><b>Date of stay</b>: {moment(currHotelReview.reviewInfo.reviewDate).format('MMM Do')}</div>
@@ -55,7 +55,7 @@ const Review = ({currHotelReview, readMore}) => (
         <br></br>
         <br></br>
       </div>
-      <div className='reviews-body-helpful-share'><div>Helpful</div>   <div>Share</div></div>
+      <div className='reviews-body-helpful-share'><div>{'\ud83d\udd92'}Helpful</div>   <div>Share</div></div>
     </div>
     <hr id='footer'></hr>
     <div className='reviews-footer'>

@@ -15,7 +15,7 @@ const Filters = ({count, filterByRatings, filterByMonth, filterByType}) => (
         <div className='reviews-filter-title-buttons'>
           <div>
             <button id='reviewButton'>Write a review</button>
-            <button id='reviewButton'>arrow</button>
+            <button id='reviewButton'>{'\u2bc6'}</button>
           </div>
         </div>
       </div>

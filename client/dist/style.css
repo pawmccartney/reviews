@@ -36,6 +36,7 @@ body {
   text-align: center;
   font-weight: bold;
   border: 1px solid lightgray;
+  cursor: pointer;
 }
 .reviews-filter-title {
   height: 16px;
@@ -59,6 +60,8 @@ body {
   margin: none;
   padding: none;
   position: relative;
+  vertical-align: middle;
+  cursor: pointer;
 }
 .reviews-filters-main {
   padding: 0em 1em;
@@ -90,6 +93,15 @@ body {
   background-color: black;
 }
 
+.reviews-selections-rating-options, .reviews-selections-rating-options > input {
+  cursor: pointer;
+}
+.reviews-selections-travelerType-options, .reviews-selections-travelerType-options > input {
+  cursor: pointer;
+}
+.reviews-selections-month-options, .reviews-selections-month-options > input {
+  cursor: pointer;
+}
 .reviews-filter-popular-words {
   display: inline-block;
   border-color: black ;

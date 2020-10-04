@@ -35,11 +35,11 @@ class ReviewApp extends React.Component {
 
     if (prev.style.display === 'none') {
       prev.style.display = 'inline';
-      readMore.innerHTML = 'Read more';
+      readMore.innerHTML = 'Read more \u2bc6';
       moreText.style.display = 'none';
     } else {
       prev.style.display = 'none';
-      readMore.innerHTML = 'Read less';
+      readMore.innerHTML = 'Read less \u2bc5';
       moreText.style.display = 'inline';
     }
   }
