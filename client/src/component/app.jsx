@@ -191,7 +191,7 @@ class ReviewApp extends React.Component {
     let ratingsCount = this.state.ratingsCount;
     let typeCount = this.state.typeCount;
     let allReviews = this.state.hotelReviews;
-    let scoreboard = ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let scoreboard = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     let range = month.split('-');
     range = [scoreboard.indexOf(range[0]) + 1, scoreboard.indexOf(range[1]) + 1];
 
@@ -207,7 +207,12 @@ class ReviewApp extends React.Component {
       allReviews.map((post) => {
         //get the date
         let d = new Date(post.reviewInfo.reviewDate);
-        d = d.getMonth();
+        d = d.getMonth() + 1;
+        if (range[0] === 12) {
+          if (range[1] >= d) {
+            newlyFiltered.push(post);
+          }
+        } else {}
         //if the date is within range
         if (range[0] <= d && range[1] >= d) {
           // add it to the currView
@@ -230,11 +235,17 @@ class ReviewApp extends React.Component {
       currFilter.map((post) => {
         //get the date
         let d = new Date(post.reviewInfo.reviewDate);
-        d = d.getMonth();
-        //if the date is within range
-        if (!(range[0] <= d && range[1] >= d)) {
-          // add it to the currView
-          newView.push(post);
+        d = d.getMonth() + 1;
+        if (range[0] === 12) {
+          if (range[1] < d) {
+            newView.push(post);
+          }
+        } else {
+          if (range[0] > d || range[1] < d) {
+            //if the date is within range
+            // add it to the currView
+            newView.push(post);
+          }
         }
       });
 

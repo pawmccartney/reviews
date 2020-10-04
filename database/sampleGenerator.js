@@ -20,8 +20,9 @@ for (var i = 0; i < 100; i++) {
   currHotelReview.responderInfo.responderClose = close.charAt(0).toUpperCase() + close.slice(1);
 
   var randomReviewNumber = Math.ceil(Math.random() * 5);
-  for (var j = 0; j <randomReviewNumber; j++) {
-    const randomDate = faker.date.recent(90);
+  //change back
+  for (var j = 0; j < 5; j++) {
+    const randomDate = faker.date.recent(360);
     currHotelReview.responderInfo.responderDate = randomDate;
     currHotelReview.responderInfo.responderName = faker.name.findName();
     currHotelReview.responderInfo.responderPosition = faker.name.jobTitle();
