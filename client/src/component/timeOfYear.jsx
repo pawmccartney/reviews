@@ -1,28 +1,41 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const ReviewsSelectionsMonthOptions = styled.label`
+  cursor: pointer;
+`;
+
+const ReviewsSelectionsMonthOptionsInput = styled.input`
+  cursor: pointer;
+`;
+
+const ReviewsSelectionsReviewMonth = styled.div`
+  display: inline-block;
+`;
 
 const TimeOfYear= ({filterByMonth}) => (
-  <div className='reviews-selections-month'>
+  <div>
     <div><b>Time of year</b></div>
     <br></br>
-    <label className='reviews-selections-month-options'>
-      <input onClick={filterByMonth} type='checkbox'></input>
-      <div className='reviews-selections-review-month'>Mar-May</div>
-    </label>
+    <ReviewsSelectionsMonthOptions>
+      <ReviewsSelectionsMonthOptionsInput onClick={filterByMonth} type='checkbox'></ReviewsSelectionsMonthOptionsInput>
+      <ReviewsSelectionsReviewMonth>Mar-May</ReviewsSelectionsReviewMonth>
+    </ReviewsSelectionsMonthOptions>
     <br></br>
-    <label className='reviews-selections-month-options'>
-      <input onClick={filterByMonth} type='checkbox'></input>
-      <div className='reviews-selections-review-month'>Jun-Aug</div>
-    </label>
+    <ReviewsSelectionsMonthOptions>
+      <ReviewsSelectionsMonthOptionsInput onClick={filterByMonth} type='checkbox'></ReviewsSelectionsMonthOptionsInput>
+      <ReviewsSelectionsReviewMonth>Jun-Aug</ReviewsSelectionsReviewMonth>
+    </ReviewsSelectionsMonthOptions>
     <br></br>
-    <label className='reviews-selections-month-options'>
-      <input onClick={filterByMonth} type='checkbox'></input>
-      <div className='reviews-selections-review-month'>Sep-Nov</div>
-    </label>
+    <ReviewsSelectionsMonthOptions>
+      <ReviewsSelectionsMonthOptionsInput onClick={filterByMonth} type='checkbox'></ReviewsSelectionsMonthOptionsInput>
+      <ReviewsSelectionsReviewMonth>Sep-Nov</ReviewsSelectionsReviewMonth>
+    </ReviewsSelectionsMonthOptions>
     <br></br>
-    <label className='reviews-selections-month-options'>
-      <input onClick={filterByMonth} type='checkbox'></input>
-      <div className='reviews-selections-review-month'>Dec-Feb</div>
-    </label>
+    <ReviewsSelectionsMonthOptions>
+      <ReviewsSelectionsMonthOptionsInput onClick={filterByMonth} type='checkbox'></ReviewsSelectionsMonthOptionsInput>
+      <ReviewsSelectionsReviewMonth>Dec-Feb</ReviewsSelectionsReviewMonth>
+    </ReviewsSelectionsMonthOptions>
   </div>
 );
 

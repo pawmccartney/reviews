@@ -29,8 +29,9 @@ class ReviewApp extends React.Component {
   }
 
   readMore(event) {
-    let prev = document.getElementById('prev');
-    let moreText = document.getElementById('more');
+    let parent = event.target.parentElement;
+    let prev = parent.children[0];
+    let moreText = parent.children[1];
     let readMore = event.target;
 
     if (prev.style.display === 'none') {
