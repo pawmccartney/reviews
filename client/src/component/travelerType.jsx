@@ -1,34 +1,47 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const ReviewsSelectionsTravelerType = styled.div`
+`;
+const ReviewsSelectionsTravelerTypeOptions = styled.label`
+  cursor: pointer;
+`;
+const ReviewsSelectionsTravelerTypeOptionsInput = styled.input`
+  cursor: pointer;
+`;
+const ReviewsSelectionsType = styled.div`
+  display: inline-block;
+`;
 
 const TravelerType= ({filterByType}) => (
-  <div className='reviews-selections-travelerType'>
+  <ReviewsSelectionsTravelerType>
     <div><b>Traveler type</b></div>
     <br></br>
-    <label className='reviews-selections-travelerType-options'>
-      <input type='checkbox' onClick={filterByType}></input>
-      <div className='reviews-selections-type'>Families</div>
-    </label>
+    <ReviewsSelectionsTravelerTypeOptions>
+      <ReviewsSelectionsTravelerTypeOptionsInput type='checkbox' onClick={filterByType}></ReviewsSelectionsTravelerTypeOptionsInput>
+      <ReviewsSelectionsType>Families</ReviewsSelectionsType>
+    </ReviewsSelectionsTravelerTypeOptions>
     <br></br>
-    <label className='reviews-selections-travelerType-options'>
-      <input type='checkbox' onClick={filterByType}></input>
-      <div className='reviews-selections-type'>Couples</div>
-    </label>
+    <ReviewsSelectionsTravelerTypeOptions>
+      <ReviewsSelectionsTravelerTypeOptionsInput type='checkbox' onClick={filterByType}></ReviewsSelectionsTravelerTypeOptionsInput>
+      <ReviewsSelectionsType>Couples</ReviewsSelectionsType>
+    </ReviewsSelectionsTravelerTypeOptions>
     <br></br>
-    <label className='reviews-selections-travelerType-options'>
-      <input type='checkbox' onClick={filterByType}></input>
-      <div className='reviews-selections-type'>Solo</div>
-    </label>
+    <ReviewsSelectionsTravelerTypeOptions>
+      <ReviewsSelectionsTravelerTypeOptionsInput type='checkbox' onClick={filterByType}></ReviewsSelectionsTravelerTypeOptionsInput>
+      <ReviewsSelectionsType>Solo</ReviewsSelectionsType>
+    </ReviewsSelectionsTravelerTypeOptions>
     <br></br>
-    <label className='reviews-selections-travelerType-options'>
-      <input type='checkbox' onClick={filterByType}></input>
-      <div className='reviews-selections-type'>Business</div>
-    </label>
+    <ReviewsSelectionsTravelerTypeOptions>
+      <ReviewsSelectionsTravelerTypeOptionsInput  type='checkbox' onClick={filterByType}></ReviewsSelectionsTravelerTypeOptionsInput>
+      <ReviewsSelectionsType>Business</ReviewsSelectionsType>
+    </ReviewsSelectionsTravelerTypeOptions>
     <br></br>
-    <label className='reviews-selections-travelerType-options'>
-      <input type='checkbox' onClick={filterByType}></input>
-      <div className='reviews-selections-type'>Friends</div>
-    </label>
-  </div>
+    <ReviewsSelectionsTravelerTypeOptions>
+      <ReviewsSelectionsTravelerTypeOptionsInput  type='checkbox' onClick={filterByType}></ReviewsSelectionsTravelerTypeOptionsInput>
+      <ReviewsSelectionsType>Friends</ReviewsSelectionsType>
+    </ReviewsSelectionsTravelerTypeOptions>
+  </ReviewsSelectionsTravelerType>
 );
 
 export default TravelerType;

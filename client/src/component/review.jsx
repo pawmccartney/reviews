@@ -1,88 +1,241 @@
 import React from 'react';
 import moment from 'moment';
+import styled from 'styled-components';
+
+const ReviewsReview = styled.div`
+  background-color: white;
+  max-width: 832px;
+  min-width: 464px;
+  width: calc(70% + 2em);
+`;
+
+const ReviewsHeader = styled.div`
+  background-color: white;
+  max-width: 800px;
+  min-width: 432px;
+  width: calc(100% - 2em);
+  padding-left: 1em;
+  padding-right: 1em;
+  display: flex;
+  padding-top: 1em;
+`;
+
+const ReviewsBody = styled.div`
+  background-color: white;
+  max-width: 800px;
+  min-width: 432px;
+  width: calc(100% - 2em);
+  padding-left: 1em;
+  padding-right: 1em;
+`;
+
+const ReviewsFooter = styled.div`
+  background-color: white;
+  max-width: 800px;
+  min-width: 432px;
+  width: calc(100% - 2em);
+  padding-left: 1em;
+  padding-right: 1em;
+`;
+
+const ReviewsProfilePicture = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const ReviewsReviewerInformation = styled.div`
+  width:100%;
+  padding-left: 1em;
+`;
+
+const ReviewsReviewerInformationDiv = styled.div`
+  color: gray;
+`;
+
+const ReviewsPictures = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto;
+  width: 100%;
+  height: auto;
+`;
+
+const ReviewsPicturesImg = styled.img`
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+`;
+
+const ReviewsRatings = styled.div`
+  display: flex;
+  width: 100%;
+  height: auto;
+`;
+
+const ReviewsRatingsDotColored = styled.span`
+  margin-right: 4px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: solid 2px green;
+  display: block;
+  background-color: green;
+`;
+
+const ReviewsRatingsDotEmpty = styled.span`
+  margin-right: 4px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: solid 2px green;
+  display: block;
+  background-color: white;
+`;
+
+const More = styled.div`
+  display:none;
+`;
+
+const ReadMore = styled.button`
+  border:none;
+  color:gray;
+  text-decoration: underline;
+  background-color:inherit;
+  cursor:pointer;
+`;
+
+const Disclaimer = styled.div`
+  color: gray;
+  font-size: 10px;
+  padding-left: 2em;
+`;
+
+const ReviewsBodyHelpfulShare = styled.div`
+  display:flex;
+  width: 30%;
+  justify-content: space-between;
+`;
+
+const ReviewsFooterResponse = styled.div`
+  display:flex;
+  width: 100%;
+`;
+
+const ReviewsResponderProfilePic = styled.img`
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const ReviewsResponse = styled.div`
+  padding-left: 1em;
+`;
+
+const ReviewsResponseDate = styled.div`
+  padding-top: 5px;
+  font-size: 15px;
+  opacity: 90%;
+`;
+
+const ReviewsResponseText = styled.div`
+  font-size: 15px;
+  opacity: 90%;
+`;
+
+const Footer = styled.hr`
+  border-top: 1px dashed gray;
+`;
+
+const Reviwer = styled.b`
+  color: black;
+`;
 
 const Review = ({currHotelReview, readMore}) => (
-  <div className='reviews-review'>
-    <div className='reviews-header'>
-      <img className='reviews-profile-picture' src={currHotelReview.memberInfo.memberImg}></img>
-      <div className='reviews-reviewer-information'>
-        <div>
-          <b id='reviewer'>{currHotelReview.memberInfo.memberUserName}</b> wrote a review {moment(currHotelReview.responderInfo.responderDate).format('MMM Do')}
-        </div>
-        <div>
+  <ReviewsReview>
+    <ReviewsHeader>
+      <ReviewsProfilePicture src={currHotelReview.memberInfo.memberImg}></ReviewsProfilePicture>
+      <ReviewsReviewerInformation>
+        <ReviewsReviewerInformationDiv>
+          <Reviwer>{currHotelReview.memberInfo.memberUserName}</Reviwer> wrote a review {moment(currHotelReview.responderInfo.responderDate).format('MMM Do')}
+        </ReviewsReviewerInformationDiv>
+        <ReviewsReviewerInformationDiv>
           {currHotelReview.memberInfo.memberLocation} • {currHotelReview.memberInfo.memberContributions} contributions • {currHotelReview.memberInfo.memberHelpful} helpful vote
-        </div>
-      </div>
-    </div>
+        </ReviewsReviewerInformationDiv>
+      </ReviewsReviewerInformation>
+    </ReviewsHeader>
     <br></br>
-    <div className='reviews-pictures'>
-      <img  src={currHotelReview.reviewInfo.reviewPictures.picture1} alt="Sample_1" ></img>
-      <img src={currHotelReview.reviewInfo.reviewPictures.picture2} alt="Sample_2" ></img>
-      <img src={currHotelReview.reviewInfo.reviewPictures.picture3} alt="Sample_3" ></img>
-    </div>
+    <ReviewsPictures>
+      <ReviewsPicturesImg  src={currHotelReview.reviewInfo.reviewPictures.picture1} alt="Sample_1" ></ReviewsPicturesImg>
+      <ReviewsPicturesImg src={currHotelReview.reviewInfo.reviewPictures.picture2} alt="Sample_2" ></ReviewsPicturesImg>
+      <ReviewsPicturesImg src={currHotelReview.reviewInfo.reviewPictures.picture3} alt="Sample_3" ></ReviewsPicturesImg>
+    </ReviewsPictures>
     <br></br>
-    <div className='reviews-body'>
-      <div className='reviews-ratings'>
+    <ReviewsBody>
+      <ReviewsRatings>
         {currHotelReview.reviewInfo.reviewRatings.map((rating) => {
           if (rating === 1) {
-            return <span className='reviews-ratings-dot' id='color'></span>
+            return <ReviewsRatingsDotColored></ReviewsRatingsDotColored>
           } else {
-            return <span className='reviews-ratings-dot' id='empty'></span>
+            return <ReviewsRatingsDotEmpty></ReviewsRatingsDotEmpty>
           }
         })}
-      </div>
+      </ReviewsRatings>
       <br></br>
       <b>{currHotelReview.reviewInfo.reviewTitle}</b>
       <div>"
         <span id="prev">
           {currHotelReview.reviewInfo.reviewText.slice(0, 100)}
         </span>
-        <span id="more">
+        <More id="more">
           {currHotelReview.reviewInfo.reviewText}
-        </span>
+        </More>
         "
+        <br></br>
+        <ReadMore onClick={readMore} id="readMore">Read more{'\u2bc6'}</ReadMore>
       </div>
-      <button onClick={readMore} id="readMore">Read more{'\u2bc6'}</button>
       <br></br>
       <br></br>
       <div><b>Date of stay</b>: {moment(currHotelReview.reviewInfo.reviewDate).format('MMM Do')}</div>
       <br></br>
       <div><b>Trip type: </b>{currHotelReview.reviewInfo.reviewTripType}</div>
       <br></br>
-      <div id='disclaimer'>
+      <Disclaimer>
         <hr></hr>
         This review is the subjective opinion of a TripAdCoba member and not of TripAdCoba LLC.
         <br></br>
         <br></br>
-      </div>
-      <div className='reviews-body-helpful-share'><div>{'\ud83d\udd92'}Helpful</div>   <div>Share</div></div>
-    </div>
-    <hr id='footer'></hr>
-    <div className='reviews-footer'>
-      <div className='reviews-footer-response'>
-        <img className='reviews-responder-profile-pic' src={currHotelReview.responderInfo.responderPicture}></img>
-        <div className='reviews-response'>
-          <div className='reviews-response-name'>{currHotelReview.responderInfo.responderOrg}</div>
-          <div className='reviews-response-date'>Responded {moment(currHotelReview.responderInfo.responderDate).fromNow()}</div>
+      </Disclaimer>
+      <ReviewsBodyHelpfulShare><div>{'\ud83d\udd92'}Helpful</div>   <div>Share</div></ReviewsBodyHelpfulShare>
+    </ReviewsBody>
+    <Footer></Footer>
+    <ReviewsFooter>
+      <ReviewsFooterResponse>
+        <ReviewsResponderProfilePic src={currHotelReview.responderInfo.responderPicture}></ReviewsResponderProfilePic>
+        <ReviewsResponse>
+          <div>{currHotelReview.responderInfo.responderOrg}</div>
+          <ReviewsResponseDate>Responded {moment(currHotelReview.responderInfo.responderDate).fromNow()}</ReviewsResponseDate>
           <br></br>
-          <div className='reviews-response-text'>
+          <ReviewsResponseText>
             <div>{currHotelReview.responderInfo.responderText}</div>
             <br></br>
             <div>{currHotelReview.responderInfo.responderClose},</div>
             <br></br>
             <div>{currHotelReview.responderInfo.responderName}</div>
             <div>{currHotelReview.responderInfo.responderPosition}</div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </ReviewsResponseText>
+        </ReviewsResponse>
+      </ReviewsFooterResponse>
+    </ReviewsFooter>
     <hr></hr>
-    <div id='disclaimer'>
+    <Disclaimer>
       This response is the subjective opinion of the management representative and not of TripAdCoba HRR.
       <br></br>
       <br></br>
-    </div>
-  </div>
+    </Disclaimer>
+  </ReviewsReview>
 );
 
 export default Review;

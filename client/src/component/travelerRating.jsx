@@ -1,69 +1,107 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const ReviewsSelectionsContainer = styled.div`
+display:flex;
+`;
+
+const ReviewsSelectionsRatingOptions = styled.label`
+cursor: pointer;
+`;
+
+const ReviewsSelectionsRatingOptionsInput = styled.input`
+cursor: pointer;
+`;
+
+const ReviewsSelectionsRatingScore = styled.div`
+  display: inline-block;
+`;
+
+const ReviewsSelectionsRatingOuterBar = styled.div`
+  display: inline-block;
+  margin-left: 10px;
+  position: relative;
+  left:0;
+  width: 100px;
+  background-color: lightgray;
+`;
+
+const ReviewsSelectionsRatingInnerBar = styled.div`
+  display: block;
+  width: 20%;
+  height: 10px;
+  background-color: black;
+`;
+
+const ReviewsSelectionsRatingCount = styled.div`
+  display: inline-block;
+  margin-left: 10px;
+`;
 
 const TravelerRating = ({filterByRatings}) => (
-  <div className='reviews-selections-rating'>
+  <div>
     <div><b>Traveler rating</b></div>
     <br></br>
-    <div className='reviews-selections-container'>
-      <div className='reviews-selections-checks'>
-        <label className='reviews-selections-rating-options'>
-          <input onClick={filterByRatings} type='checkbox'></input>
-          <div className='reviews-selections-rating-score '>Excellent</div>
-        </label>
+    <ReviewsSelectionsContainer>
+      <div>
+        <ReviewsSelectionsRatingOptions>
+          <ReviewsSelectionsRatingOptionsInput onClick={filterByRatings} type='checkbox'></ReviewsSelectionsRatingOptionsInput>
+          <ReviewsSelectionsRatingScore>Excellent</ReviewsSelectionsRatingScore>
+        </ReviewsSelectionsRatingOptions>
         <br></br>
-        <label className='reviews-selections-rating-options'>
-          <input onClick={filterByRatings} type='checkbox'></input>
-          <div className='reviews-selections-rating-score '>Very Good</div>
-        </label>
+        <ReviewsSelectionsRatingOptions>
+          <ReviewsSelectionsRatingOptionsInput onClick={filterByRatings} type='checkbox'></ReviewsSelectionsRatingOptionsInput>
+          <ReviewsSelectionsRatingScore>Very Good</ReviewsSelectionsRatingScore>
+        </ReviewsSelectionsRatingOptions>
         <br></br>
-        <label className='reviews-selections-rating-options'>
-          <input onClick={filterByRatings} type='checkbox'></input>
-          <div className='reviews-selections-rating-score '>Average</div>
-        </label>
+        <ReviewsSelectionsRatingOptions>
+          <ReviewsSelectionsRatingOptionsInput onClick={filterByRatings} type='checkbox'></ReviewsSelectionsRatingOptionsInput>
+          <ReviewsSelectionsRatingScore>Average</ReviewsSelectionsRatingScore>
+        </ReviewsSelectionsRatingOptions>
         <br></br>
-        <label className='reviews-selections-rating-options'>
-          <input onClick={filterByRatings} type='checkbox'></input>
-          <div className='reviews-selections-rating-score '>Poor</div>
-        </label>
+        <ReviewsSelectionsRatingOptions>
+          <ReviewsSelectionsRatingOptionsInput onClick={filterByRatings} type='checkbox'></ReviewsSelectionsRatingOptionsInput>
+          <ReviewsSelectionsRatingScore>Poor</ReviewsSelectionsRatingScore>
+        </ReviewsSelectionsRatingOptions>
         <br></br>
-        <label className='reviews-selections-rating-options'>
-          <input onClick={filterByRatings} type='checkbox'></input>
-          <div className='reviews-selections-rating-score '>Terrible</div>
-        </label>
+        <ReviewsSelectionsRatingOptions>
+          <ReviewsSelectionsRatingOptionsInput onClick={filterByRatings} type='checkbox'></ReviewsSelectionsRatingOptionsInput>
+          <ReviewsSelectionsRatingScore>Terrible</ReviewsSelectionsRatingScore>
+        </ReviewsSelectionsRatingOptions>
       </div>
-      <div className='reviews-slections-allBars'>
-        <div className='reviews-selections-rating-bars' id='Excellent'>
-          <div className='reviews-selections-rating-outerBar'>
-            <div className='reviews-selections-rating-innerBar'></div>
-          </div>
-          <div className='reviews-selections-rating-count'>1234</div>
+      <div>
+        <div>
+          <ReviewsSelectionsRatingOuterBar>
+            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+          </ReviewsSelectionsRatingOuterBar>
+          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
         </div>
-        <div className='reviews-selections-rating-bars' id='Very Good'>
-          <div className='reviews-selections-rating-outerBar'>
-            <div className='reviews-selections-rating-innerBar'></div>
-          </div>
-          <div className='reviews-selections-rating-count'>1234</div>
+        <div>
+          <ReviewsSelectionsRatingOuterBar>
+            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+          </ReviewsSelectionsRatingOuterBar>
+          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
         </div>
-        <div className='reviews-selections-rating-bars' id='Average'>
-          <div className='reviews-selections-rating-outerBar'>
-            <div className='reviews-selections-rating-innerBar'></div>
-          </div>
-          <div className='reviews-selections-rating-count'>1234</div>
+        <div>
+          <ReviewsSelectionsRatingOuterBar>
+            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+          </ReviewsSelectionsRatingOuterBar>
+          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
         </div>
-        <div className='reviews-selections-rating-bars' id='Poor'>
-          <div className='reviews-selections-rating-outerBar'>
-            <div className='reviews-selections-rating-innerBar'></div>
-          </div>
-          <div className='reviews-selections-rating-count'>1234</div>
+        <div>
+          <ReviewsSelectionsRatingOuterBar>
+            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+          </ReviewsSelectionsRatingOuterBar>
+          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
         </div>
-        <div className='reviews-selections-rating-bars' id='Terrible'>
-          <div className='reviews-selections-rating-outerBar'>
-            <div className='reviews-selections-rating-innerBar'></div>
-          </div>
-          <div className='reviews-selections-rating-count'>1234</div>
+        <div>
+          <ReviewsSelectionsRatingOuterBar>
+            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+          </ReviewsSelectionsRatingOuterBar>
+          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
         </div>
       </div>
-    </div>
+    </ReviewsSelectionsContainer>
   </div>
 );
 
