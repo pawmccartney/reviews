@@ -5,7 +5,7 @@ const ReviewsSearch = styled.div`
   background-color: white;
   max-width: 800px;
   min-width: 432px;
-  width: 70%;
+  width: calc(50% + 1em);
   padding-left: 1em;
   padding-right: 1em;
   display: flex;

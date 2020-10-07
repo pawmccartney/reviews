@@ -7,7 +7,7 @@ const ReviewsFilter = styled.div`
   background-color: white;
   max-width: 832px;
   min-width: 464px;
-  width: calc(70% + 2em);
+  width: calc(50% + 3em);
   border: 1px solid lightgray;
 `;
 
