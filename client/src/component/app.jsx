@@ -349,7 +349,7 @@ class ReviewApp extends React.Component {
         <br></br>
         <Search/>
         <br></br>
-        <div className='reviews-table'>
+        <div>
           {this.sort(view.map(review => <div><Review key={review._id} currHotelReview={review} readMore={this.readMore.bind(this)}/><br></br></div>))}
         </div>
       </div>

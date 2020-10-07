@@ -6,7 +6,7 @@ const ReviewsReview = styled.div`
   background-color: white;
   max-width: 832px;
   min-width: 464px;
-  width: calc(70% + 2em);
+  width: calc(50% + 3em);
 `;
 
 const ReviewsHeader = styled.div`
@@ -52,6 +52,9 @@ const ReviewsReviewerInformation = styled.div`
 
 const ReviewsReviewerInformationDiv = styled.div`
   color: gray;
+`;
+const ReviewsReviewerMore = styled.div`
+  content: "\E091";
 `;
 
 const ReviewsPictures = styled.div`
@@ -165,6 +168,7 @@ const Review = ({currHotelReview, readMore}) => (
           {currHotelReview.memberInfo.memberLocation} • {currHotelReview.memberInfo.memberContributions} contributions • {currHotelReview.memberInfo.memberHelpful} helpful vote
         </ReviewsReviewerInformationDiv>
       </ReviewsReviewerInformation>
+      <ReviewsReviewerMore></ReviewsReviewerMore>
     </ReviewsHeader>
     <br></br>
     <ReviewsPictures>
