@@ -4,9 +4,10 @@ import styled from 'styled-components';
 
 const ReviewsReview = styled.div`
   background-color: white;
-  max-width: 832px;
+  /* max-width: 832px;
   min-width: 664px;
-  width: calc(50% + 3em);
+  width: calc(50% + 3em); */
+  width: 700px;
 `;
 
 const ReviewsHeader = styled.div`

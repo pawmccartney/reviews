@@ -22,7 +22,8 @@ class ReviewApp extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/reviews')
+    let hotel = window.location.pathname.slice(1);
+    axios.get(`/hotel/${hotel}`)
       .then(result => {
         this.setState({hotelReviews: result.data, view: result.data, ratingsFilter: result.data, monthFilter: result.data, typeFilter: result.data});
       });
