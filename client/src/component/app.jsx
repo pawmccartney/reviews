@@ -26,7 +26,6 @@ class ReviewApp extends React.Component {
     hotel = hotel === ''? 'root' : hotel;
     console.log('component did mount. pathname: ', hotel);
     axios.get(`/hotel/${hotel}`)
-    // axios.get(`/hotel/hotel0`)
       .then(result => {
         this.setState({hotelReviews: result.data, view: result.data, ratingsFilter: result.data, monthFilter: result.data, typeFilter: result.data});
       });

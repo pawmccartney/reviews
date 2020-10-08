@@ -12,14 +12,6 @@ app.listen(port, function() {
   console.log(`listening on port: ${port}`);
 });
 
-app.get('/reviews', (req, res) => {
-  console.log('innnnn');
-  db.getReviewsByHotel(0)
-    .then(result => {
-      res.send(result);
-    });
-});
-
 app.get('/hotel/:hotel', (req, res) => {
   console.log('in');
   console.log('hotel', req.params.hotel);
