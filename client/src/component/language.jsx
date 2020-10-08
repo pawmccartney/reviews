@@ -5,6 +5,10 @@ const ReviewsSelectionsLanguage = styled.div`
 `;
 const ReviewsSelectionsLanguageOptions = styled.label`
 `;
+const ReviewsSelectionsLanguageMoreOptions = styled.div`
+  font-weight: bold;
+  cursor: pointer;
+`;
 
 
 const Language= () => (
@@ -31,7 +35,7 @@ const Language= () => (
       Portuguese
     </ReviewsSelectionsLanguageOptions>
     <br></br>
-    <div><b>More</b></div>
+    <ReviewsSelectionsLanguageMoreOptions>More</ReviewsSelectionsLanguageMoreOptions>
   </ReviewsSelectionsLanguage>
 );
 

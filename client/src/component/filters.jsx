@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const ReviewsFilter = styled.div`
   background-color: white;
   max-width: 832px;
-  min-width: 464px;
+  min-width: 664px;
   width: calc(50% + 3em);
   border: 1px solid lightgray;
 `;
@@ -73,12 +73,18 @@ const ReviewButton = styled.div`
   cursor: pointer;
 `;
 
+const Icon = styled.div`
+  font-size: 30px;
+`;
+
 const Filters = ({count, filterByRatings, filterByMonth, filterByType}) => (
   <ReviewsFilter>
     <ReviewsFiltersNavbar>
-      <ReviewsFiltersNavbarFirstOption><div>Reviews Icon</div><div>{count}</div>Reviews</ReviewsFiltersNavbarFirstOption>
-      <ReviewsFiltersNavbarOption><div>Chat Icon</div><div>1,234</div>Q+A</ReviewsFiltersNavbarOption>
-      <ReviewsFiltersNavbarOption><div>LightBulb Icon</div><div>123</div>Room tips</ReviewsFiltersNavbarOption>
+      <ReviewsFiltersNavbarFirstOption><Icon>&#x1f4dd;</Icon><div>{count}</div>Reviews</ReviewsFiltersNavbarFirstOption>
+      <ReviewsFiltersNavbarOption><Icon>&#128172;</Icon><div>1,234</div>Q+A</ReviewsFiltersNavbarOption>
+      <ReviewsFiltersNavbarOption><Icon>&#x1F4A1;</Icon><div>123</div>Room tips
+      {/* &#xF723; */}
+      </ReviewsFiltersNavbarOption>
     </ReviewsFiltersNavbar>
     <ReviewsFiltersMain>
       <ReviewsFilterTitle>

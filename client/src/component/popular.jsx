@@ -9,6 +9,9 @@ const ReviewsFilterPopularWords = styled.button`
   margin: 2px 2px;
   height: 30px;
   cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+  }
 `;
 
 const ReviewsFilterPopularWordsAllReviews = styled.button`
@@ -20,6 +23,9 @@ const ReviewsFilterPopularWordsAllReviews = styled.button`
   margin: 2px 2px;
   height: 30px;
   cursor: pointer;
+  &:hover {
+    opacity: 80%;
+  }
 `;
 
 const PopularMentions = () => (
