@@ -10,6 +10,7 @@ const ReviewsSearch = styled.div`
   padding-left: 1em;
   padding-right: 1em;
   display: flex;
+  z-index: 1;
 `;
 
 const ReviewsSearchIcon = styled.span`

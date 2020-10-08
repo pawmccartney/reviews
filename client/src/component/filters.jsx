@@ -10,6 +10,7 @@ const ReviewsFilter = styled.div`
   width: calc(50% + 3em); */
   width: 700px;
   border: 1px solid lightgray;
+  z-index: 1;
 `;
 
 const ReviewsFiltersNavbar = styled.div`

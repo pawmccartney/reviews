@@ -8,6 +8,7 @@ const ReviewsReview = styled.div`
   min-width: 664px;
   width: calc(50% + 3em); */
   width: 700px;
+  z-index: 1;
 `;
 
 const ReviewsHeader = styled.div`
