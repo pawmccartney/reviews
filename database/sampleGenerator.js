@@ -16,7 +16,7 @@ for (var i = 0; i < 100; i++) {
   //hotel info
   currHotelReview.responderInfo.hotelId = i;
   currHotelReview.responderInfo.responderOrg = faker.company.companyName();
-  currHotelReview.responderInfo.responderPicture = `https://adcobareviews.s3-us-west-1.amazonaws.com/30.jpg`;
+  currHotelReview.responderInfo.responderPicture = `https://adcobareviews.s3-us-west-1.amazonaws.com/a30.jpg`;
   currHotelReview.responderInfo.responderClose = close.charAt(0).toUpperCase() + close.slice(1);
 
   var randomReviewNumber = Math.ceil(Math.random() * 5);
@@ -29,7 +29,7 @@ for (var i = 0; i < 100; i++) {
     currHotelReview.responderInfo.responderText = faker.lorem.paragraph();
     //member info
     currHotelReview.memberInfo.memberId = j;
-    currHotelReview.memberInfo.memberImg = `https://adcobareviews.s3-us-west-1.amazonaws.com/${Math.ceil((Math.random() * 9) + 20)}.jpg`;
+    currHotelReview.memberInfo.memberImg = `https://adcobareviews.s3-us-west-1.amazonaws.com/a${Math.ceil((Math.random() * 9) + 20)}.jpg`;
     currHotelReview.memberInfo.memberUserName = faker.internet.userName();
     currHotelReview.memberInfo.memberLocation = faker.address.city();
     currHotelReview.memberInfo.memberContributions = Math.ceil(Math.random() * 50);
@@ -42,10 +42,10 @@ for (var i = 0; i < 100; i++) {
     currHotelReview.reviewInfo.reviewText = faker.lorem.text();
     currHotelReview.reviewInfo.reviewTripType = tType;
     currHotelReview.reviewInfo.reviewPictures = {
-      picture1:`https://adcobareviews.s3-us-west-1.amazonaws.com/${Math.ceil(Math.random() * 20)}.jpg`,
-      picture2:`https://adcobareviews.s3-us-west-1.amazonaws.com/${Math.ceil(Math.random() * 20)}.jpg`,
-      picture3:`https://adcobareviews.s3-us-west-1.amazonaws.com/${Math.ceil(Math.random() * 20)}.jpg`,
-      picture4:`https://adcobareviews.s3-us-west-1.amazonaws.com/${Math.ceil(Math.random() * 20)}.jpg`
+      picture1:`https://adcobareviews.s3-us-west-1.amazonaws.com/a${Math.ceil(Math.random() * 20)}.jpg`,
+      picture2:`https://adcobareviews.s3-us-west-1.amazonaws.com/a${Math.ceil(Math.random() * 20)}.jpg`,
+      picture3:`https://adcobareviews.s3-us-west-1.amazonaws.com/a${Math.ceil(Math.random() * 20)}.jpg`,
+      picture4:`https://adcobareviews.s3-us-west-1.amazonaws.com/a${Math.ceil(Math.random() * 20)}.jpg`
     };
     let ratings = [0, 0, 0, 0, 0];
     let randNum = Math.ceil(Math.random() * 5)

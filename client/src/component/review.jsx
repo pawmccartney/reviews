@@ -7,6 +7,7 @@ const ReviewsReview = styled.div`
   /* max-width: 832px;
   min-width: 664px;
   width: calc(50% + 3em); */
+  border: 1px solid lightgray;
   width: 700px;
   z-index: 1;
 `;
@@ -66,14 +67,15 @@ const ReviewsPictures = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   width: 100%;
-  height: auto;
+  height: 130px;
+  overflow:hidden;
 `;
 
 const ReviewsPicturesImg = styled.img`
   display: block;
   max-width: 100%;
   width: auto;
-  height: auto;
+
 `;
 
 const ReviewsRatings = styled.div`
@@ -217,7 +219,7 @@ const Review = ({currHotelReview, readMore}) => (
         <br></br>
         <br></br>
       </Disclaimer>
-      <ReviewsBodyHelpfulShare><div>{'\ud83d\udd92'}Helpful</div>   <div>Share</div></ReviewsBodyHelpfulShare>
+      <ReviewsBodyHelpfulShare><div>{'\ud83d\udd92'} Helpful</div>   <div>{'\uE800'} Share</div></ReviewsBodyHelpfulShare>
     </ReviewsBody>
     <Footer></Footer>
     <ReviewsFooter>
