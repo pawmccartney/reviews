@@ -26,9 +26,37 @@ const ReviewsSelectionsRatingOuterBar = styled.div`
   background-color: lightgray;
 `;
 
-const ReviewsSelectionsRatingInnerBar = styled.div`
+const ReviewsSelectionsRatingInnerBarExcellent = styled.div`
   display: block;
-  width: 20%;
+  width: 0%;
+  height: 10px;
+  background-color: black;
+`;
+
+const ReviewsSelectionsRatingInnerBarVeryGood = styled.div`
+  display: block;
+  width: 40%;
+  height: 10px;
+  background-color: black;
+`;
+
+const ReviewsSelectionsRatingInnerBarAverage = styled.div`
+  display: block;
+  width: 0%;
+  height: 10px;
+  background-color: black;
+`;
+
+const ReviewsSelectionsRatingInnerBarPoor = styled.div`
+  display: block;
+  width: 60%;
+  height: 10px;
+  background-color: black;
+`;
+
+const ReviewsSelectionsRatingInnerBarTerrible = styled.div`
+  display: block;
+  width: 0%;
   height: 10px;
   background-color: black;
 `;
@@ -72,33 +100,33 @@ const TravelerRating = ({filterByRatings}) => (
       <div>
         <div>
           <ReviewsSelectionsRatingOuterBar>
-            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+            <ReviewsSelectionsRatingInnerBarExcellent></ReviewsSelectionsRatingInnerBarExcellent>
           </ReviewsSelectionsRatingOuterBar>
-          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
+          <ReviewsSelectionsRatingCount>0</ReviewsSelectionsRatingCount>
         </div>
         <div>
           <ReviewsSelectionsRatingOuterBar>
-            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+            <ReviewsSelectionsRatingInnerBarVeryGood></ReviewsSelectionsRatingInnerBarVeryGood>
           </ReviewsSelectionsRatingOuterBar>
-          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
+          <ReviewsSelectionsRatingCount>2</ReviewsSelectionsRatingCount>
         </div>
         <div>
           <ReviewsSelectionsRatingOuterBar>
-            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+            <ReviewsSelectionsRatingInnerBarAverage></ReviewsSelectionsRatingInnerBarAverage>
           </ReviewsSelectionsRatingOuterBar>
-          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
+          <ReviewsSelectionsRatingCount>0</ReviewsSelectionsRatingCount>
         </div>
         <div>
           <ReviewsSelectionsRatingOuterBar>
-            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+            <ReviewsSelectionsRatingInnerBarPoor></ReviewsSelectionsRatingInnerBarPoor>
           </ReviewsSelectionsRatingOuterBar>
-          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
+          <ReviewsSelectionsRatingCount>3</ReviewsSelectionsRatingCount>
         </div>
         <div>
           <ReviewsSelectionsRatingOuterBar>
-            <ReviewsSelectionsRatingInnerBar></ReviewsSelectionsRatingInnerBar>
+            <ReviewsSelectionsRatingInnerBarTerrible></ReviewsSelectionsRatingInnerBarTerrible>
           </ReviewsSelectionsRatingOuterBar>
-          <ReviewsSelectionsRatingCount>1234</ReviewsSelectionsRatingCount>
+          <ReviewsSelectionsRatingCount>0</ReviewsSelectionsRatingCount>
         </div>
       </div>
     </ReviewsSelectionsContainer>

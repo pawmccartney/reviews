@@ -6,7 +6,7 @@ const ReviewsSearch = styled.div`
   /* max-width: 800px;
   min-width: 632px;
   width: calc(50% + 1em); */
-  width: calc(700px - 2em);
+  width: calc(700px + 1em);
   padding-left: 1em;
   padding-right: 1em;
   display: flex;

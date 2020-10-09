@@ -7,7 +7,8 @@ const ReviewsReview = styled.div`
   /* max-width: 832px;
   min-width: 664px;
   width: calc(50% + 3em); */
-  width: 700px;
+  border: 1px solid lightgray;
+  width: calc(700px + 3em);
   z-index: 1;
 `;
 
@@ -66,14 +67,15 @@ const ReviewsPictures = styled.div`
   display: grid;
   grid-template-columns: auto auto auto;
   width: 100%;
-  height: auto;
+  height: 130px;
+  overflow:hidden;
 `;
 
 const ReviewsPicturesImg = styled.img`
   display: block;
   max-width: 100%;
   width: auto;
-  height: auto;
+
 `;
 
 const ReviewsRatings = styled.div`
@@ -116,7 +118,7 @@ const ReadMore = styled.button`
 
 const Disclaimer = styled.div`
   color: gray;
-  font-size: 10px;
+  font-size: 14px;
   padding-left: 2em;
 `;
 
@@ -211,13 +213,13 @@ const Review = ({currHotelReview, readMore}) => (
       <br></br>
       <div><b>Trip type: </b>{currHotelReview.reviewInfo.reviewTripType}</div>
       <br></br>
+      <hr></hr>
       <Disclaimer>
-        <hr></hr>
         This review is the subjective opinion of a TripAdCoba member and not of TripAdCoba LLC.
         <br></br>
         <br></br>
       </Disclaimer>
-      <ReviewsBodyHelpfulShare><div>{'\ud83d\udd92'}Helpful</div>   <div>Share</div></ReviewsBodyHelpfulShare>
+      <ReviewsBodyHelpfulShare><div>{'\ud83d\udd92'} Helpful</div>   <div>{'\uE800'} Share</div></ReviewsBodyHelpfulShare>
     </ReviewsBody>
     <Footer></Footer>
     <ReviewsFooter>

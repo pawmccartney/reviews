@@ -8,7 +8,7 @@ const ReviewsFilter = styled.div`
   /* max-width: 832px;
   min-width: 664px;
   width: calc(50% + 3em); */
-  width: 700px;
+  width: calc(700px + 3em);
   border: 1px solid lightgray;
   z-index: 1;
 `;
@@ -58,19 +58,19 @@ const ReviewsFilterTitleButtons = styled.div`
   display:flex;
 `;
 
-const ReviewButton = styled.div`
+const ButtonContainer = styled.div`
+`;
+
+const ReviewButton = styled.button`
   background-color: black;
-  border-radius: 5%;
+  border-radius: 8%;
   color: white;
   display: inline-block;
   font-size: 16px;
   font-weight: bold;
-  height: 20px;
-  margin: none;
   margin-left: 2px;
-  padding: 1em;
-  position: relative;
-  text-align: center;
+  height: 30px;
+  padding: 5px;
   vertical-align: middle;
   cursor: pointer;
 `;
@@ -83,8 +83,8 @@ const Filters = ({count, filterByRatings, filterByMonth, filterByType}) => (
   <ReviewsFilter>
     <ReviewsFiltersNavbar>
       <ReviewsFiltersNavbarFirstOption><Icon>&#x1f4dd;</Icon><div>{count}</div>Reviews</ReviewsFiltersNavbarFirstOption>
-      <ReviewsFiltersNavbarOption><Icon>&#128172;</Icon><div>1,234</div>Q+A</ReviewsFiltersNavbarOption>
-      <ReviewsFiltersNavbarOption><Icon>&#x1F4A1;</Icon><div>123</div>Room tips
+      <ReviewsFiltersNavbarOption><Icon>&#128172;</Icon><div>3</div>Q+A</ReviewsFiltersNavbarOption>
+      <ReviewsFiltersNavbarOption><Icon>&#x1F4A1;</Icon><div>2</div>Room tips
       {/* &#xF723; */}
       </ReviewsFiltersNavbarOption>
     </ReviewsFiltersNavbar>
@@ -92,10 +92,10 @@ const Filters = ({count, filterByRatings, filterByMonth, filterByType}) => (
       <ReviewsFilterTitle>
         <ReviewsFilterTitleParts>Reviews</ReviewsFilterTitleParts>
         <ReviewsFilterTitleButtons>
-          <div>
+          <ButtonContainer>
             <ReviewButton>Write a review</ReviewButton>
             <ReviewButton>{'\u2bc6'}</ReviewButton>
-          </div>
+          </ButtonContainer>
         </ReviewsFilterTitleButtons>
       </ReviewsFilterTitle>
       <hr></hr>
