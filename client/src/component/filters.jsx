@@ -8,7 +8,7 @@ const ReviewsFilter = styled.div`
   /* max-width: 832px;
   min-width: 664px;
   width: calc(50% + 3em); */
-  width: 700px;
+  width: calc(700px + 3em);
   border: 1px solid lightgray;
   z-index: 1;
 `;

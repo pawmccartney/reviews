@@ -26,7 +26,7 @@ for (var i = 0; i < 100; i++) {
     currHotelReview.responderInfo.responderDate = randomDate;
     currHotelReview.responderInfo.responderName = faker.name.findName();
     currHotelReview.responderInfo.responderPosition = faker.name.jobTitle();
-    currHotelReview.responderInfo.responderText = faker.lorem.paragraph();
+    currHotelReview.responderInfo.responderText = faker.lorem.paragraph(3, '\n');
     //member info
     currHotelReview.memberInfo.memberId = j;
     currHotelReview.memberInfo.memberImg = `https://adcobareviews.s3-us-west-1.amazonaws.com/a${Math.ceil((Math.random() * 9) + 20)}.jpg`;

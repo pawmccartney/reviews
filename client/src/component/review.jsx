@@ -8,7 +8,7 @@ const ReviewsReview = styled.div`
   min-width: 664px;
   width: calc(50% + 3em); */
   border: 1px solid lightgray;
-  width: 700px;
+  width: calc(700px + 3em);
   z-index: 1;
 `;
 
@@ -118,7 +118,7 @@ const ReadMore = styled.button`
 
 const Disclaimer = styled.div`
   color: gray;
-  font-size: 10px;
+  font-size: 14px;
   padding-left: 2em;
 `;
 
@@ -213,8 +213,8 @@ const Review = ({currHotelReview, readMore}) => (
       <br></br>
       <div><b>Trip type: </b>{currHotelReview.reviewInfo.reviewTripType}</div>
       <br></br>
+      <hr></hr>
       <Disclaimer>
-        <hr></hr>
         This review is the subjective opinion of a TripAdCoba member and not of TripAdCoba LLC.
         <br></br>
         <br></br>

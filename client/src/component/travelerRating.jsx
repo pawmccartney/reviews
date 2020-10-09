@@ -28,7 +28,7 @@ const ReviewsSelectionsRatingOuterBar = styled.div`
 
 const ReviewsSelectionsRatingInnerBarExcellent = styled.div`
   display: block;
-  width: 40%;
+  width: 0%;
   height: 10px;
   background-color: black;
 `;
@@ -49,7 +49,7 @@ const ReviewsSelectionsRatingInnerBarAverage = styled.div`
 
 const ReviewsSelectionsRatingInnerBarPoor = styled.div`
   display: block;
-  width: 20%;
+  width: 60%;
   height: 10px;
   background-color: black;
 `;
@@ -102,7 +102,7 @@ const TravelerRating = ({filterByRatings}) => (
           <ReviewsSelectionsRatingOuterBar>
             <ReviewsSelectionsRatingInnerBarExcellent></ReviewsSelectionsRatingInnerBarExcellent>
           </ReviewsSelectionsRatingOuterBar>
-          <ReviewsSelectionsRatingCount>2</ReviewsSelectionsRatingCount>
+          <ReviewsSelectionsRatingCount>0</ReviewsSelectionsRatingCount>
         </div>
         <div>
           <ReviewsSelectionsRatingOuterBar>
@@ -120,7 +120,7 @@ const TravelerRating = ({filterByRatings}) => (
           <ReviewsSelectionsRatingOuterBar>
             <ReviewsSelectionsRatingInnerBarPoor></ReviewsSelectionsRatingInnerBarPoor>
           </ReviewsSelectionsRatingOuterBar>
-          <ReviewsSelectionsRatingCount>1</ReviewsSelectionsRatingCount>
+          <ReviewsSelectionsRatingCount>3</ReviewsSelectionsRatingCount>
         </div>
         <div>
           <ReviewsSelectionsRatingOuterBar>
