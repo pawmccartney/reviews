@@ -5,7 +5,7 @@ test('sanity check', () => {
 });
 
 test("client's get request is met with an array", (done) => {
-  axios.get('http://localhost:4003/reviews')
+  axios.get('http://localhost:4003/hotel/hotel3')
     .then(result => {
       expect(Array.isArray(result.data)).toBe(true);
       done();
@@ -15,7 +15,7 @@ test("client's get request is met with an array", (done) => {
 });
 
 test("expects data from server to have the reviewer's name and review", (done) => {
-  axios.get('http://localhost:4003/reviews')
+  axios.get('http://localhost:4003/hotel/hotel4')
     .then(result => {
       let currReview = result.data[0];
       let reviewer = currReview['memberInfo']['memberUserName'];
