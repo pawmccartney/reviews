@@ -70,7 +70,7 @@ const update = (details) => {
 
 const remove = (reviewId) => {
   return new Promise((resolve, reject) => {
-    Review.findByIdAndDelete(revewId, (err, result) => {
+    Review.findByIdAndDelete(reviewId, (err, result) => {
       if (err) reject(err);
       resolve(result);
     })

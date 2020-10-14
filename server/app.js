@@ -1,7 +1,7 @@
 const express = require('express');
 let app = express();
 const db = require('../database/index.js');
-const controllor = require('./controllor');
+const controllor = require('./controllor.js');
 
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(express.urlencoded({extended: true}));
@@ -57,12 +57,15 @@ app.put('/:reviewId', (req, res) => {
     });
 })
 
-// app.delete('/:reviewId', (req, res) => {
-//   let { body } = req;
-//   controllor.remove(body.reviewId)
-//     .then((reult) => {
-//       res.end()
-//     })
-//     .catch();
-// });
+app.delete('/', (req, res) => {
+  let { body } = req;
+  controllor.remove(body.reviewId)
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log('Error deleteing: \n',  err);
+      res.status(204).header({error: err}).end();
+    });
+});
 module.exports = app;

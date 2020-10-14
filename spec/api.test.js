@@ -11,7 +11,7 @@ var  reviewIdPlaceholder;
 var reviewPlaceholder;
 describe("CRUD operation interface", () => {
 
-  describe('responds to GET requests', () => {
+  describe('GET', () => {
 
     test("client's get request is met with an array", (done) => {
       return request(app)
@@ -41,7 +41,7 @@ describe("CRUD operation interface", () => {
 
   })
 
-  describe('handles POST operations', () => {
+  describe('POST', () => {
 
     test('a post request with a new review creates a new entry in the database', (done) => {
       let review = {
@@ -89,30 +89,52 @@ describe("CRUD operation interface", () => {
         })
     })
   })
+
+  describe('PUT', () => {
+    beforeEach(() => {
+      return request(app)
+        .put(`/${reviewIdPlaceholder}`)
+        .send({reviewId: reviewIdPlaceholder, newText: 'Changed my mind. THis is not a good product'})
+        .catch((err) => {
+          console.error(err);
+        })
+    });
+    test('Updates review text on a PUT operation', (done) => {
+      db.getReview(reviewIdPlaceholder)
+        .then((result) => {
+          let newText =  result.reviewInfo.reviewText;
+          expect(result.reviewInfo).toBeDefined();
+          expect(newText).toBeDefined();
+          expect(newText).toMatch('Changed my mind. THis is not a good product');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        })
+    })
+  })
+
+  describe('DELETE', () => {
+    beforeEach(() => {
+      return  request(app)
+        .delete('/')
+        .send({reviewId: reviewIdPlaceholder})
+        .catch((err) => {
+          console.error(err);
+        })
+    })
+
+    test(`Review should not be found after deleted`, () => {
+      db.getReview(reviewIdPlaceholder)
+        .then((result) => {
+          expect(result).toBe(null);
+        })
+        .catch((err) => {
+          done(err);
+        })
+    });
+  });
+
 });
 
-describe('updates review', () => {
-  beforeEach(() => {
-    return request(app)
-      .put(`/${reviewIdPlaceholder}`)
-      .send({reviewId: reviewIdPlaceholder, newText: 'Changed my mind. THis is not a good product'})
-      .catch((err) => {
-        console.error(err);
-      })
-  });
-  test('Updates review text on a PUT operation', (done) => {
-    db.getReview(reviewIdPlaceholder)
-      .then((result) => {
-        console.log(result)
-        let newText =  result.reviewInfo.reviewText;
-        expect(result.reviewInfo).toBeDefined();
-        expect(newText).toBeDefined();
-        expect(newText).toMatch('Changed my mind. THis is not a good product');
-        done();
-      })
-      .catch((err) => {
-        done(err);
-      })
-  })
-})
 

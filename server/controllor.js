@@ -28,6 +28,17 @@ const updateReview = function(reviewInfo, next) {
         })
 };
 
+const remove = function(reviewId, next) {
+    db.remove(reviewId)
+    .then((result) => {
+        next(null, result._doc);
+    })
+    .catch((err) => {
+        console.log(`DB failed remove: \n ${err}`)
+        next(err);
+    })
+};
+
 module.exports = {
     addReview:   function(review) {
         return new Promise((resolve, reject) => {
@@ -48,6 +59,14 @@ module.exports = {
                 resolve(resp);
             })
         })
+    }, 
+    remove: function(reviewId) {
+        return new Promise((resolve, reject) => {
+            remove(reviewId, (err, resp)  => {
+                if (err) reject(err);
+                resolve(resp);
+            })
+        });
     }
 }
 
