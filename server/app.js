@@ -1,10 +1,12 @@
 const express = require('express');
 let app = express();
 const db = require('../database/index.js');
+const controllor = require('./controllor');
 
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
 
 app.get('/hotel/:hotel', (req, res) => {
   console.log('in');
@@ -30,5 +32,29 @@ app.get('/:id', (req, res) => {
     }
   });
 });
+
+app.post('/', (req,  res) => {
+  let { body } = req;
+  controllor.addReview(body.review)
+    .then((newReview) => {
+      res.send(newReview);
+    })
+    .catch((err) => {
+      console.log(`Need to log new error \n\n ${err}`)
+      res.status(204).header({error: err}).end();
+    })
+  });
+  
+app.put('/:reviewId', (req, res) => {
+  let { body } = req;
+  controllor.updateReview({reviewId: body.reviewId, newText: body.newText})
+    .then((uopdatedReview) => {
+      res.send(uopdatedReview)
+    })
+    .catch((err) => {
+      console.log(`err updateing: \n ${err}`);
+      res.status(204).header({error: err}).end();
+    });
+})
 
 module.exports = app;

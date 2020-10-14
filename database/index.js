@@ -45,7 +45,7 @@ var save = (review) => {
       }
     })
   })
-}
+};
 
 var getReviewsByHotel = (hotelId) => {
   return new Promise((resolve, reject) => {
@@ -57,7 +57,17 @@ var getReviewsByHotel = (hotelId) => {
       }
     })
   })
-}
+};
 
+const update = (reviewInfo) => {
+  return new Promise((resolve, reject) => {
+    Review.findByIdAndUpdate({_id: reviewInfo.reviewId}, {'$set': {'reviewInfo.reviewText': reviewInfo.newText}}, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    })
+  });
+};
+
+module.exports.update = update;
 module.exports.save = save;
 module.exports.getReviewsByHotel = getReviewsByHotel;
