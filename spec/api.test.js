@@ -1,14 +1,14 @@
 const axios = require('axios');
 const request = require('superTest');
 const app = require('../server/app');
-
+const db = require('../database/index');
 
 test('sanity check', () => {
   expect(true).toBe(true);
 });
 
-
-
+var  reviewIdPlaceholder;
+var reviewPlaceholder;
 describe("CRUD operation interface", () => {
 
   describe('responds to GET requests', () => {
@@ -56,7 +56,7 @@ describe("CRUD operation interface", () => {
         reviewInfo: {
           reviewDate: 'This is such an amazing and great for usage',
           reviewTitle: 'wow wow wow',
-          reviewText: 'wow wow wow',
+          reviewText: 'This product was great!',
           reviewTripType: 'wow wow wow',
           reviewPictures: {picture1: 'https://adcobareviews.s3-us-west-1.amazonaws.com/a30.jpg', picture2: 'https://adcobareviews.s3-us-west-1.amazonaws.com/a30.jpg', picture3: 'https://adcobareviews.s3-us-west-1.amazonaws.com/a30.jpg', picture4: 'https://adcobareviews.s3-us-west-1.amazonaws.com/a30.jpg'},
           reviewRatings: ['hello', 'hello', 'hello']
@@ -80,25 +80,8 @@ describe("CRUD operation interface", () => {
           expect(resp.body.responderInfo).toBeDefined();
           expect(resp.body.reviewInfo).toBeDefined();
           expect(resp.body.memberInfo).toBeDefined();
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        })
-    })
-  })
-
-  describe('updates review', () => {
-    test('Updates review text on a PUT operation', (done) => {
-      return request(app)
-        .put(`/5f860b5098b4a66ffc1d5122`)
-        .send({reviewId: '5f860b5098b4a66ffc1d5122', newText: 'Changed my mind. THis is not a good product'})
-        .then((result) => {
-          let newReview = result.body.reviewInfo;
-          let newText = newReview.reviewText;
-          expect(newReview).toBeDefined();
-          expect(newText).toBeDefined();
-          expect(newText).toMatch('Changed my mind. THis is not a good product');
+          reviewIdPlaceholder = resp.body._id;
+          reviewPlaceholder = resp.body._doc;
           done();
         })
         .catch((err) => {
@@ -107,3 +90,29 @@ describe("CRUD operation interface", () => {
     })
   })
 });
+
+describe('updates review', () => {
+  beforeEach(() => {
+    return request(app)
+      .put(`/${reviewIdPlaceholder}`)
+      .send({reviewId: reviewIdPlaceholder, newText: 'Changed my mind. THis is not a good product'})
+      .catch((err) => {
+        console.error(err);
+      })
+  });
+  test('Updates review text on a PUT operation', (done) => {
+    db.getReview(reviewIdPlaceholder)
+      .then((result) => {
+        console.log(result)
+        let newText =  result.reviewInfo.reviewText;
+        expect(result.reviewInfo).toBeDefined();
+        expect(newText).toBeDefined();
+        expect(newText).toMatch('Changed my mind. THis is not a good product');
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      })
+  })
+})
+

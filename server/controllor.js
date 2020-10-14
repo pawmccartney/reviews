@@ -20,7 +20,6 @@ const addReview = function(data, next) {
 const updateReview = function(reviewInfo, next) {
     db.update(reviewInfo)
         .then((result) => {
-            console.log(`db attemted update: \n ${result}`)
             next(null, result._doc);
         })
         .catch((err) => {

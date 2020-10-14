@@ -48,8 +48,8 @@ app.post('/', (req,  res) => {
 app.put('/:reviewId', (req, res) => {
   let { body } = req;
   controllor.updateReview({reviewId: body.reviewId, newText: body.newText})
-    .then((uopdatedReview) => {
-      res.send(uopdatedReview)
+    .then((updatedReview) => {
+      res.send(updatedReview)
     })
     .catch((err) => {
       console.log(`err updateing: \n ${err}`);
@@ -57,4 +57,12 @@ app.put('/:reviewId', (req, res) => {
     });
 })
 
+// app.delete('/:reviewId', (req, res) => {
+//   let { body } = req;
+//   controllor.remove(body.reviewId)
+//     .then((reult) => {
+//       res.end()
+//     })
+//     .catch();
+// });
 module.exports = app;
