@@ -45,7 +45,7 @@ var save = (review) => {
       }
     })
   })
-}
+};
 
 var getReviewsByHotel = (hotelId) => {
   return new Promise((resolve, reject) => {
@@ -57,7 +57,36 @@ var getReviewsByHotel = (hotelId) => {
       }
     })
   })
+};
+
+const update = (details) => {
+  return new Promise((resolve, reject) => {
+    Review.findByIdAndUpdate({_id: details.reviewId}, {'$set': {'reviewInfo.reviewText': details.newText}}, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    })
+  });
+};
+
+const remove = (reviewId) => {
+  return new Promise((resolve, reject) => {
+    Review.findByIdAndDelete(reviewId, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    })
+  });
 }
 
+const getReview = (reviewId) => {
+  return  new Promise((resolve, reject) => {
+    Review.findById(reviewId, (err, result) =>{
+      if (err) reject(err);
+      resolve(result);
+    })
+  });
+}
+module.exports.update = update;
 module.exports.save = save;
 module.exports.getReviewsByHotel = getReviewsByHotel;
+module.exports.remove = remove;
+module.exports.getReview = getReview;
