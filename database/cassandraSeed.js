@@ -1,98 +1,72 @@
 const client = require('./cassandraIndex');
-
+const faker = require('faker');
 const clearOldTable = 'DROP TABLE IF EXISTS hotels';
-const createHotelsTable = `CREATE TABLE hotels(id INT, hotelName TEXT, reviewTitle TEXT, reviewerName TEXT, reviewImages list<text>, memberInfo map<text, text>, reviewText TEXT, responderUsername TEXT, responderInfo map<text, text>, PRIMARY KEY(id, reviewTitle, reviewerName, responderUsername));`; 
 
+/*------------------------------------------------------\
+| create a new table partitioned as such                |
+|    million group -                                    |
+|        hundredthosands grouping -                     |
+|            batch (split every 100k / 2) -             |
+|                hotelid -                              |
+|                    reviewTitle(one per hotel) -       |
+|                        reviewerName -                 |
+|                            responderInfo -            |
+ \-----------------------------------------------------*/
+const createHotelsTable = `CREATE TABLE hotels(million INT, hundredthousand INT, hotelbatch INT, hotelId INT, hotelname text, reviewTitle text, reviewerName text, reviewImages list<text>, memberInfo map<text, text>, reviewText text, responderUsername text, responderInfo map<text, text>, PRIMARY KEY(million, hundredthousand, hotelbatch, hotelId, reviewTitle, reviewerName, responderUsername));`; 
+
+/*--------------------------------------\
+| Generate randomized seed data         |
+\--------------------------------------*/
 const inputs = {
-    hotelNames: [
-        "'Test motel'",
-        "'Test Hotal'",
-        "'motel'",
-        "'Hotal'",
-        "'Hotalmotel'",
-        "'motelHotal'",
-        "'Test'",
-        "'Totel'"
-    ],
-    reviewTitles: [
-        "'test review'",
-        "'test review'",
-        "'test review'",
-        "'test review'",
-        "'test review'",
-        "'test review'",
-        "'test review'",
-        "'test review'"
-    ],
-    reviewerNames: [
-        "'Ahmed'",
-        "'Elawad'",
-        "'AElawad'",
-        "'EAhmed'",
-        "'Emed'",
-        "'Awad'",
-        "'Ewad'",
-        "'Amed'"
-    ],
+    hotelNames: function() {
+        return faker.lorem.word();
+    },
+    reviewTitles: function(i) {
+        return `'${faker.lorem.words() +i}'`
+    },
+    reviewerNames: function(i) {
+        return `'${faker.lorem.word() + i}'`;
+    },
     reviewImages: "['none', 'noneX2', 'noneX3', 'noneX$']",
-    memberInfo: [
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}",
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}",
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}",
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}",
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}",
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}",
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}",
-        "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
-    ],
-    reviewText: [
-        "'this is one generic entry'",
-        "'this is one generic entry'",
-        "'this is one generic entry'",
-        "'this is one generic entry'",
-        "'this is one generic entry'",
-        "'this is one generic entry'",
-        "'this is one generic entry'",
-        "'this is one generic entry'"
-    ],
-    responderUsername: [
-        "'ahmeds'",
-        "'not ahmeds'",
-        "'not ahmeds review'",
-        "'ahmeds review'",
-        "'not review'",
-        "'review'",
-        "'review ahmeds'",
-        "'not'"
-    ],
-    responderInfo: [
-        "{'name': 'no name'}",
-        "{'name': 'no name'}",
-        "{'name': 'no name'}",
-        "{'name': 'no name'}",
-        "{'name': 'no name'}",
-        "{'name': 'no name'}",
-        "{'name': 'no name'}",
-        "{'name': 'no name'}"
-    ]
+    memberInfo: function() {
+        return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
+    },
+    reviewText: function() {
+        return "'this is sample text'";
+    },
+    responderUsername: function(i) {
+        return `'${faker.lorem.word() + i}'`;
+    },
+    responderInfo: function() {
+        return "{'name': 'no name'}";
+    }
 };
 
-
-const createEntries = function(inputs, i = 0, recordNum = 0) {
-    const insertRecord = `INSERT INTO hotels(id, hotelName, reviewTitle, reviewerName, reviewImages, memberInfo, reviewText, responderUsername, responderInfo)VALUES(${recordNum}, ${inputs.hotelNames[i]}, ${inputs.reviewTitles[i]}, ${inputs.reviewerNames[i]}, ${inputs.reviewImages}, ${inputs.memberInfo[i]}, ${inputs.reviewText[i]}, ${inputs.responderUsername[i]}, ${inputs.responderInfo[i]});`;
-    return client.execute(insertRecord)
-        .then(() => {
-            if (recordNum < 1000) {
-                if (i === 7 ) {
-                    i = -1;
-                }
-                recordNum++;
-                return createEntries(inputs, i + 1, recordNum + 1);
-            }
-        })
+/*--------------------------------------\
+|       Batch entires by 100            |
+|   Define inputs and partitions here   |
+\--------------------------------------*/
+const seedByHundred = function(inputs, i = 1) {
+    let float = i / 1000000;
+    let million = Math.floor(i / 1000000); // 1 for 1 mill, 2 for 2 mill, 3 for 3 mill
+    let hundredThou = million - float  < 0 ? 1 : million - float * 10;
+    let batch = float - million < 0.5 ? 1 : 2;
+    let group = '';
+    for (let x =  i; x < 100 + i; x++) {
+        const insertionScript = `INSERT INTO hotels(million, hundredthousand, hotelbatch, hotelId, hotelname, reviewTitle, reviewerName, reviewImages, memberInfo, reviewText, responderUsername, responderInfo)VALUES(${million}, ${hundredThou}, ${batch}, ${x}, '${inputs.hotelNames()}',${inputs.reviewTitles(x)},${inputs.reviewerNames(x)}, ${inputs.reviewImages}, ${inputs.memberInfo()}, ${inputs.reviewText()}, ${inputs.responderUsername(x)}, ${inputs.responderInfo()});`;
+        group = group.concat(insertionScript);
+    }
+    const batchQry = 'BEGIN BATCH ' + group + 'APPLY BATCH;';
+    console.log(`Seeding: ${i}`);
+    client.execute(batchQry)
         .catch((err) => {
-            console.error(err);
-        })
+            debugger;
+        });
+        if (i < 200000) {
+            setTimeout(() => {
+                seedByHundred(inputs, i + 100)
+            }, 20)
+        }
 };
 
 client.execute(clearOldTable)
@@ -100,14 +74,11 @@ client.execute(clearOldTable)
         return client.execute(createHotelsTable);
     })
     .then((res) => {
-        return createEntries(inputs);
+        seedByHundred(inputs);
     })
-    .then((res) => {
-        return client.execute('SELECT * FROM hotels');
-    })
-    .then((entries) => {
-        console.log(entries);
+    .then(() => {
+        seedByHundred(inputs, 100001);
     })
     .catch((err) => {
-        console.error(err);
+        debugger;
     })
