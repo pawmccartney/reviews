@@ -9,8 +9,6 @@ app.use(express.json());
 
 
 app.get('/hotel/:hotel', (req, res) => {
-  console.log('in');
-  console.log('hotel', req.params.hotel);
   let hotel = req.params.hotel === 'root'? 'hotel0': req.params.hotel;
   let id = hotel.slice(5);
   db.getReviewsByHotel(id)
