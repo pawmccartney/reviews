@@ -1,6 +1,7 @@
 const client = require('./cassandraIndex');
 const faker = require('faker');
 const clearOldTable = 'DROP TABLE IF EXISTS hotels';
+const ProgressBar = require('progress');
 
 /*------------------------------------------------------\
 | create a new table partitioned as such                |
@@ -12,7 +13,7 @@ const clearOldTable = 'DROP TABLE IF EXISTS hotels';
 |                        reviewerName -                 |
 |                            responderInfo -            |
  \-----------------------------------------------------*/
-const createHotelsTable = `CREATE TABLE hotels(million INT, hundredthousand INT, hotelbatch INT, hotelId INT, hotelname text, reviewTitle text, reviewerName text, reviewImages list<text>, memberInfo map<text, text>, reviewText text, responderUsername text, responderInfo map<text, text>, PRIMARY KEY(million, hundredthousand, hotelbatch, hotelId, reviewTitle, reviewerName, responderUsername));`; 
+const createHotelsTable = `CREATE TABLE hotels(million INT, hundredthousand INT, hotelbatch INT, hotelId INT, hotelname text, reviewTitle text, reviewInfo map<text, text>, reviewerName text, reviewImages list<text>, memberInfo map<text, text>, reviewText text, responderUsername text, responderInfo map<text, text>, PRIMARY KEY(million, hundredthousand, hotelbatch, hotelId, reviewTitle, reviewerName, responderUsername));`; 
 
 /*--------------------------------------\
 | Generate randomized seed data         |
@@ -27,18 +28,23 @@ const inputs = {
     reviewerNames: function(i) {
         return `'${faker.lorem.word() + i}'`;
     },
-    reviewImages: "['none', 'noneX2', 'noneX3', 'noneX$']",
-    memberInfo: function() {
-        return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
+    reviewInfo: function() {
+        return `{'date': '${new Date()}', 'text': '${faker.lorem.paragraphs()}', 'tripTypw': '${faker.lorem.word()}'}`
+    },
+    reviewImages: function(urls) {
+        return `[${urls.map((url) => `'${url}'`)}]`
+    },
+    memberInfo: function(i) {
+        return `{'id': '${i}', 'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}`
     },
     reviewText: function() {
-        return "'this is sample text'";
+        return `'${faker.lorem.paragraphs()}'`;
     },
     responderUsername: function(i) {
         return `'${faker.lorem.word() + i}'`;
     },
-    responderInfo: function() {
-        return "{'name': 'no name'}";
+    responderInfo: function(x) {
+        return `{'hotelId': '${x}', 'responderName': '${faker.lorem.word()}', 'orginization': '${faker.lorem.word()}', 'position': '${faker.lorem.words()}', 'picture': 'none', 'date': '${new Date()}', 'text': '${faker.lorem.paragraph()}'}`;
     }
 };
 
@@ -47,37 +53,43 @@ const inputs = {
 |   Define inputs and partitions here   |
 \--------------------------------------*/
 const seedByHundred = function(inputs, i = 1) {
-    let float = i / 1000000;
-    let million = Math.floor(i / 1000000); // 1 for 1 mill, 2 for 2 mill, 3 for 3 mill
-    let hundredThou = million - float  < 0 ? 1 : million - float * 10;
-    let batch = float - million < 0.5 ? 1 : 2;
+    let million = Math.floor(i / 1000000); // 0 indexed millions
+    let hundredThouFloat = i / 100000;
+    let hundredThou = Math.floor(hundredThouFloat); 
+    let batch = hundredThouFloat - hundredThou < 0.5 ? 1 : 2;
     let group = '';
     for (let x =  i; x < 100 + i; x++) {
-        const insertionScript = `INSERT INTO hotels(million, hundredthousand, hotelbatch, hotelId, hotelname, reviewTitle, reviewerName, reviewImages, memberInfo, reviewText, responderUsername, responderInfo)VALUES(${million}, ${hundredThou}, ${batch}, ${x}, '${inputs.hotelNames()}',${inputs.reviewTitles(x)},${inputs.reviewerNames(x)}, ${inputs.reviewImages}, ${inputs.memberInfo()}, ${inputs.reviewText()}, ${inputs.responderUsername(x)}, ${inputs.responderInfo()});`;
+        const insertionScript = `INSERT INTO hotels(million, hundredthousand, hotelbatch, hotelId, hotelname, reviewTitle, reviewInfo, reviewerName, reviewImages, memberInfo, reviewText, responderUsername, responderInfo)VALUES(${million}, ${hundredThou}, ${batch}, ${x}, '${inputs.hotelNames()}',${inputs.reviewTitles(x)}, ${inputs.reviewInfo()},${inputs.reviewerNames(x)}, ${inputs.reviewImages(['none','none','none','none' ])}, ${inputs.memberInfo(x)}, ${inputs.reviewText()}, ${inputs.responderUsername(x)}, ${inputs.responderInfo(x)});`;
         group = group.concat(insertionScript);
     }
     const batchQry = 'BEGIN BATCH ' + group + 'APPLY BATCH;';
-    console.log(`Seeding: ${i}`);
-    client.execute(batchQry)
+    const bar = new ProgressBar(':bar', { total: i })
+        if (i < 300000) {
+            setInterval(() => {
+                bar.tick();
+                seedByHundred(inputs, i + 100);
+            }, 30)
+        }
+        client.execute(batchQry)
         .catch((err) => {
             debugger;
         });
-        if (i < 200000) {
-            setTimeout(() => {
-                seedByHundred(inputs, i + 100)
-            }, 20)
-        }
 };
 
+// client.execute('SELECT * from hotels where million = 0 and hundredthousand = 1 and hotelbatch = 1 and hotelId = 100801;')
+//     .then((res) => {
+//         console.log(res);
+//         debugger;
+//     })
+//     .catch(err => {
+//         debugger;
+//     })
 client.execute(clearOldTable)
     .then((res) => {
         return client.execute(createHotelsTable);
     })
     .then((res) => {
         seedByHundred(inputs);
-    })
-    .then(() => {
-        seedByHundred(inputs, 100001);
     })
     .catch((err) => {
         debugger;
