@@ -1,4 +1,4 @@
 node_modules
 client/dist/bundle.js
-
+.env
 # make sure to include aws s3
