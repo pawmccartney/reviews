@@ -43,28 +43,54 @@ const getUrlArrayOfImages = function(imagesNeeded) {
 /*--------------------------------------\
 | Generate randomized seed data         |
 \--------------------------------------*/
-const inputs = {
-    hotelNames: function() {
-        return faker.lorem.word();
+let inputs = {
+    cassandraInputs: {
+        hotelNames: function() {
+            return faker.lorem.word();
+        },
+        reviewTitles: function(i) {
+            return `${faker.lorem.words() +i}`
+        },
+        reviewerNames: function(i) {
+            return faker.lorem.word() + i;
+        },
+        memberInfo: function() {
+            return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
+        },
+        reviewText: function() {
+            return `TH LKMhis is sample text`;
+        },
+        responderUsername: function(i) {
+            return `${faker.lorem.word() + i}`;
+        },
+        responderInfo: function(i, date) {
+            let imageUrl = imageUrls[Math.floor(Math.random() * 688)];
+            return `{'name': '${faker.lorem.word()}','hotelId': '${i}','responderOrg': '${faker.lorem.words()}','responderPicture': '${imageUrl}','responderDate': '${date}','reponderPosition': '${faker.lorem.words()}','responderText': '${faker.lorem.paragraph()}'}`;
+        }
     },
-    reviewTitles: function(i) {
-        return `${faker.lorem.words() +i}`
-    },
-    reviewerNames: function(i) {
-        return faker.lorem.word() + i;
-    },
-    memberInfo: function() {
-        return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
-    },
-    reviewText: function() {
-        return `TH LKMhis is sample text`;
-    },
-    responderUsername: function(i) {
-        return `${faker.lorem.word() + i}`;
-    },
-    responderInfo: function(i, date) {
-        let imageUrl = imageUrls[Math.floor(Math.random() * 688)];
-        return `{'name': '${faker.lorem.word()}','hotelId': '${i}','responderOrg': '${faker.lorem.words()}','responderPicture': '${imageUrl}','responderDate': '${date}','reponderPosition': '${faker.lorem.words()}','responderText': '${faker.lorem.paragraph()}'}`;
+    postGresInputs: {
+        hotelNames: function() {
+            return faker.lorem.word();
+        },
+        reviewTitles: function(i) {
+            return `${faker.lorem.words() +i}`
+        },
+        reviewerNames: function(i) {
+            return faker.lorem.word() + i;
+        },
+        memberInfo: function() {
+            return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
+        },
+        reviewText: function() {
+            return `TH LKMhis is sample text`;
+        },
+        responderUsername: function(i) {
+            return `${faker.lorem.word() + i}`;
+        },
+        responderInfo: function(i, date) {
+            let imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+            return `{'name': '${faker.lorem.word()}','hotelId': '${i}','responderOrg': '${faker.lorem.words()}','responderPicture': '${imageUrl}','responderDate': '${date}','reponderPosition': '${faker.lorem.words()}','responderText': '${faker.lorem.paragraph()}'}`;
+        }
     }
 };
 
@@ -73,48 +99,59 @@ const inputs = {
 |   Define inputs and partitions here   |
 \--------------------------------------*/
 
-const makeCassandraEntries = (group, i, boundry) => {
+const makeCassandraEntries = (cassandraData, i, boundry) => {
     let float = i / 1000000;
     let million = Math.floor(float); // 0 indexed
     let hundredThou = million - float  < 0 ? 1 : million - float * 10; // 1 indexed
     let batch = float - million < 0.5 ? 1 : 2; // partition value: 1st hlf of current 100k group -> 1, 2nd half -> 2 ie; 49,000 -> 1, 51,000 -> 2, 112,000 -> 1, 152,000 -> 2
+    let group = '';
     for (let x =  i; x < boundry; x++) {
         tracker.increment();
-        let insertionScript;
+        let row;
         let date = new Date();
         if (x === 1000) {
-            insertionScript = `${million}^${hundredThou}^${batch}^${x}^${inputs.hotelNames()}^${inputs.reviewTitles(x)}^${inputs.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${inputs.memberInfo()}"^"${inputs.reviewText()}"^${inputs.responderUsername(x)}^"${inputs.responderInfo(x, date)}"`;
+            row = `${million}^${hundredThou}^${batch}^${x}^${cassandraData.hotelNames()}^${cassandraData.reviewTitles(x)}^${cassandraData.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${cassandraData.memberInfo()}"^"${cassandraData.reviewText()}"^${cassandraData.responderUsername(x)}^"${cassandraData.responderInfo(x, date)}"`;
         } else {            
-            insertionScript = `${million}^${hundredThou}^${batch}^${x}^${inputs.hotelNames()}^${inputs.reviewTitles(x)}^${inputs.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${inputs.memberInfo()}"^"${inputs.reviewText()}"^${inputs.responderUsername(x)}^"${inputs.responderInfo(x, date)}"\n`;
+            row = `${million}^${hundredThou}^${batch}^${x}^${cassandraData.hotelNames()}^${cassandraData.reviewTitles(x)}^${cassandraData.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${cassandraData.memberInfo()}"^"${cassandraData.reviewText()}"^${cassandraData.responderUsername(x)}^"${cassandraData.responderInfo(x, date)}"\n`;
         }
-        group = group.concat(insertionScript);
+        group = group.concat(row);
     }
     return  group;
 }
 
-const makePostgresEntries = (group, i, boundry) => {
-    let float = i / 1000000;
-    let million = Math.floor(float); // 0 indexed
-    let hundredThou = million - float  < 0 ? 1 : million - float * 10; // 1 indexed
-    let batch = float - million < 0.5 ? 1 : 2; // partition value: 1st hlf of current 100k group -> 1, 2nd half -> 2 ie; 49,000 -> 1, 51,000 -> 2, 112,000 -> 1, 152,000 -> 2
-    for (let x =  i; x < boundry; x++) {
-        tracker.increment();
-        let insertionScript;
-        let date = new Date();
-        if (x === 1000) {
-            insertionScript = `${million}^${hundredThou}^${batch}^${x}^${inputs.hotelNames()}^${inputs.reviewTitles(x)}^${inputs.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${inputs.memberInfo()}"^"${inputs.reviewText()}"^${inputs.responderUsername(x)}^"${inputs.responderInfo(x, date)}"`;
-        } else {            
-            insertionScript = `${million}^${hundredThou}^${batch}^${x}^${inputs.hotelNames()}^${inputs.reviewTitles(x)}^${inputs.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${inputs.memberInfo()}"^"${inputs.reviewText()}"^${inputs.responderUsername(x)}^"${inputs.responderInfo(x, date)}"\n`;
+const makePostgresEntries = (table, i, boundry, postGresInputs) => {
+    let group = '';
+    if (table === 'members') {
+        for (let start = i; start < boundry; start++) {
+            let row;
+            if (start === 1000) {
+                row = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}, ${faker.lorem.word() + start}, ${faker.lorem.words() + start}, ${Math.floor(Math.random() * 25 + 2)}, ${Math.floor(Math.random() * 8 + 3)}, ${faker.lorem.words()}, ${faker.lorem.words()}`;
+            } else {
+                row = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}, ${faker.lorem.word() + start}, ${faker.lorem.words() + start}, ${Math.floor(Math.random() * 25 + 2)}, ${Math.floor(Math.random() * 8 + 3)}, ${faker.lorem.words()}, ${faker.lorem.words()}\n`;
+            }
+            group = group.concat(row);
         }
-        group = group.concat(insertionScript);
+    } else if (table === 'pictures') {
+
+    } else if (table === 'posts') {
+        
+    } else {
+        for (let start = i; start < boundry; start++) {
+            let row;
+            if (start === 1000) {
+                row = `${faker.lorem.words() + start}`;
+            } else {
+                row = `${faker.lorem.words() + start}\n`;
+            }
+            group = group.concat(row);
+        }
     }
     return  group;
 }
 
 
-const generateData = (i, inputs, header, boundry, stream, forCassandra) => {
-    let group = header ? header : '';
-    let entries = stream ? makeCassandraEntries(group, i, boundry) : makePostgresEntries(group, i, boundry);
+const generateData = (i, inputs, header, boundry, stream, forCassandra, table) => {
+    let entries = forCassandra ? makeCassandraEntries(inputs.cassandraInputs, i, boundry) : makePostgresEntries(table, i, boundry);
     return async function() {
         await stream.write(entries, (err) => {
             if (err) return console.error(err);
@@ -122,15 +159,15 @@ const generateData = (i, inputs, header, boundry, stream, forCassandra) => {
     }
 }
 
-const exportDataForBd = function(forCassandra) {
+const exportDataForBd = function(forCassandra, table) {
     tracker.start(10000000, 0);
-    let stream = forCassandra ? fs.createWriteStream('../database/cassandraData.csv') : fs.createWriteStream('../database/postgresData.csv');
+    let stream = forCassandra ? fs.createWriteStream('./database/cassandraData.csv') : fs.createWriteStream(`./database/postgres${table}.csv`);
     for (let i = 1; i < 1000; i+= 100) {
         let header = i === 1 ? 'million,hundredthousand,hotelbatch,hotelid,hotelname,reviewtitle,reviewername,reviewimages,memberinfo,reviewtext,responderusername,responderinfo\n' : null;
-        let makeData = generateData(i, inputs, '', i + 100, stream, forCassandra);
+        let makeData = generateData(i, inputs, '', i + 100, stream, forCassandra, table);
         makeData();
     }
     tracker.stop();
 };
 
-exportDataForBd(true);
+exportDataForBd(false, 'members');
