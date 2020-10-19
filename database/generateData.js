@@ -44,53 +44,27 @@ const getUrlArrayOfImages = function(imagesNeeded) {
 | Generate randomized seed data         |
 \--------------------------------------*/
 let inputs = {
-    cassandraInputs: {
-        hotelNames: function() {
-            return faker.lorem.word();
-        },
-        reviewTitles: function(i) {
-            return `${faker.lorem.words() +i}`
-        },
-        reviewerNames: function(i) {
-            return faker.lorem.word() + i;
-        },
-        memberInfo: function() {
-            return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
-        },
-        reviewText: function() {
-            return `TH LKMhis is sample text`;
-        },
-        responderUsername: function(i) {
-            return `${faker.lorem.word() + i}`;
-        },
-        responderInfo: function(i, date) {
-            let imageUrl = imageUrls[Math.floor(Math.random() * 688)];
-            return `{'name': '${faker.lorem.word()}','hotelId': '${i}','responderOrg': '${faker.lorem.words()}','responderPicture': '${imageUrl}','responderDate': '${date}','reponderPosition': '${faker.lorem.words()}','responderText': '${faker.lorem.paragraph()}'}`;
-        }
+    hotelNames: function() {
+        return faker.lorem.word();
     },
-    postGresInputs: {
-        hotelNames: function() {
-            return faker.lorem.word();
-        },
-        reviewTitles: function(i) {
-            return `${faker.lorem.words() +i}`
-        },
-        reviewerNames: function(i) {
-            return faker.lorem.word() + i;
-        },
-        memberInfo: function() {
-            return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
-        },
-        reviewText: function() {
-            return `TH LKMhis is sample text`;
-        },
-        responderUsername: function(i) {
-            return `${faker.lorem.word() + i}`;
-        },
-        responderInfo: function(i, date) {
-            let imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-            return `{'name': '${faker.lorem.word()}','hotelId': '${i}','responderOrg': '${faker.lorem.words()}','responderPicture': '${imageUrl}','responderDate': '${date}','reponderPosition': '${faker.lorem.words()}','responderText': '${faker.lorem.paragraph()}'}`;
-        }
+    reviewTitles: function(i) {
+        return `${faker.lorem.words() +i}`
+    },
+    reviewerNames: function(i) {
+        return faker.lorem.word() + i;
+    },
+    memberInfo: function() {
+        return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
+    },
+    reviewText: function() {
+        return `TH LKMhis is sample text`;
+    },
+    responderUsername: function(i) {
+        return `${faker.lorem.word() + i}`;
+    },
+    responderInfo: function(i, date) {
+        let imageUrl = imageUrls[Math.floor(Math.random() * 688)];
+        return `{'name': '${faker.lorem.word()}','hotelId': '${i}','responderOrg': '${faker.lorem.words()}','responderPicture': '${imageUrl}','responderDate': '${date}','reponderPosition': '${faker.lorem.words()}','responderText': '${faker.lorem.paragraph()}'}`;
     }
 };
 
@@ -126,47 +100,53 @@ const makeCassandraEntries = (cassandraData, i, boundry) => {
 |     Random data is generated use hotel |
 |     ID  and force create realtionships |
 \---------------------------------------*/
-const makeReviews = (hotelId) => {
+const makeReviews = (hotelId, boundry) => {
     let numberOfRevews = Math.floor(Math.random() * 20 + 3);
     let rowGroup = '';
+    let previousReview = 0;
+    let reviewReference = null;
     for (let start = 0; start < numberOfRevews; start++) {
         let isReview = Math.random() < 0.7 ? true : false;
-        let row = ``;
-        if (isReview) {
-            if (hotelId === 1000 && start === numberOfRevews) {
-                row = `${hotelId}^${isReview}^${faker.lorem.paragraph()}^${new Date()}^${faker.lorem.words()}^${faker.lorem.word()}^${Math.floor(Math.random() * 10)}^${faker.lorem.words()}`
-            } else {
-                row = `${hotelId}^${isReview}^${faker.lorem.paragraph()}^${new Date()}^${faker.lorem.words()}^${faker.lorem.word()}^${Math.floor(Math.random() * 10)}^${faker.lorem.words()}\n`
-            }
+        let reviewId, postText, row, images;
+        if (isReview) { 
+            images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`
+            postText = JSON.stringify(faker.lorem.paragraphs()); 
+            reviewId = previousReview; 
+            previousReview++; 
+            reviewReference = null;
         } else {
-            if (hotelId === 1000 && start === numberOfRevews) {
-                row =`${hotelId}^${isReview}^${faker.lorem.paragraph()}^${new Date()}^^^^${faker.lorem.words()}^`
-            } else {
-                row =`${hotelId}^${isReview}^${faker.lorem.paragraph()}^${new Date()}^^^^${faker.lorem.words()}^\n`
-            }
+            images = `${null}^${null}^${null}^${null}`;
+            postText = faker.lorem.paragraph();
+            reviewId = null;
+            reviewReference = previousReview;
+        }
+        if (hotelId === 10000000 && start === numberOfRevews) {
+            row = `${hotelId}^${isReview}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${faker.lorem.words()}^${reviewReference}^${images}^${new Date()}`
+        } else {
+            row = `${hotelId}^${isReview}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${faker.lorem.words()}^${reviewReference}^${images}^${new Date()}\n`
         }
         rowGroup = rowGroup.concat(row);
     }
     return rowGroup;
 }
+
 const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
     let group = '';
     if (table === 'members') {
         for (let start = hotelId; start < boundry; start++) {
             tracker.increment();
             let row;
-            if (start === 10000000) {
-                row = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${faker.lorem.word() + start}^${faker.lorem.words() + start}^${Math.floor(Math.random() * 25 + 2)}^${Math.floor(Math.random() * 8 + 3)}^${faker.lorem.words()}^${faker.lorem.words()}`;
+            if (start === 100000) {
+                row = `${start}^${faker.lorem.words()}^${faker.lorem.words() + start}^${Math.floor(Math.random() * 100 + 1)}^${Math.floor(Math.random() * 40)}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${faker.lorem.words()}^${faker.lorem.words()}`;
             } else {
-                row = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${faker.lorem.word() + start}^${faker.lorem.words() + start}^${Math.floor(Math.random() * 25 + 2)}^${Math.floor(Math.random() * 8 + 3)}^${faker.lorem.words()}^${faker.lorem.words()}\n`;
+                row = `${start}^${faker.lorem.words()}^${faker.lorem.words() + start}^${Math.floor(Math.random() * 100 + 1)}^${Math.floor(Math.random() * 40)}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${faker.lorem.words()}^${faker.lorem.words()}\n`;
             }
             group = group.concat(row);
         }
-    } else if (table === 'pictures') {
-
     } else if (table === 'posts') {
         for (let start = hotelId; start < boundry; start++) {
-            group = group.concat(makeReviews(start));
+            tracker.increment();
+            group = group.concat(makeReviews(start, boundry));
         }
     } else {
         for (let start = hotelId; start < boundry; start++) {
@@ -182,24 +162,21 @@ const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
     }
     return  group;
 }
-
-
-const generateData = (hotelId, inputs, header, boundry, stream, forCassandra, table) => {
-    let entries = forCassandra ? makeCassandraEntries(inputs.cassandraInputs, hotelId, boundry) : makePostgresEntries(table, hotelId, boundry);
-    return async function() {
-        await stream.write(entries, (err) => {
-            if (err) return console.error(err);
-        });
+    
+function exportDataForBd(forCassandra, table, fileNum) {
+    let stream = forCassandra ? fs.createWriteStream('./database/cassandraData.csv') : fs.createWriteStream(`../database/postgres${table}_${fileNum}.csv`);
+    tracker.start(5000000, 0);
+    let hotelId = 1;
+    const write = function() {
+        while (hotelId < 10000000) {
+            let entries = forCassandra ? makeCassandraEntries(inputs, ) : makePostgresEntries('posts', hotelId, hotelId + 10000);
+            stream.write(entries);
+            hotelId+= 10000;
+        }
+        stream.once('drain', write);
+        tracker.stop();
     }
+    write();
 }
 
-const exportDataForBd = function(forCassandra, table) {
-    tracker.start(10000000, 0);
-    let stream = forCassandra ? fs.createWriteStream('./database/cassandraData.csv') : fs.createWriteStream(`../database/postgres${table}.csv`);
-    for (let hotelId = 1; hotelId <= 10000000; hotelId+= 100000) {
-        let makeData = generateData(hotelId, inputs, '', hotelId + 100000, stream, forCassandra, table);
-        makeData();
-    }
-    tracker.stop();
-};
-exportDataForBd(false, 'members');
+exportDataForBd(false, 'posts', 2);
