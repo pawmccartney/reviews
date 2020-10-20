@@ -1,6 +1,7 @@
 const faker = require('faker');
 const fs = require("fs");
 const ProgressBar = require('cli-progress');
+const { spawn } = require('child_process');
 const tracker = new ProgressBar.SingleBar({
     format: 'CLI Progress | {percentage}% || {value}/{total} Entries created',
     barCompleteChar: '\u2588',
@@ -105,8 +106,9 @@ const makeReviews = (hotelId, boundry) => {
     let rowGroup = '';
     let previousReview = 0;
     let reviewReference = null;
+    let triptypes = ['Families', 'Couples', 'Solo', 'Business', 'Friends'];
     for (let start = 0; start < numberOfRevews; start++) {
-        let isReview = Math.random() < 0.7 ? true : false;
+        let isReview = Math.random() < 0.6 ? true : false;
         let reviewId, postText, row, images;
         if (isReview) { 
             images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`
@@ -121,9 +123,9 @@ const makeReviews = (hotelId, boundry) => {
             reviewReference = previousReview;
         }
         if (hotelId === 10000000 && start === numberOfRevews) {
-            row = `${hotelId}^${isReview}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${faker.lorem.words()}^${reviewReference}^${images}^${new Date()}`
+            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${reviewReference}^${faker.date.recent(360)}`
         } else {
-            row = `${hotelId}^${isReview}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${faker.lorem.words()}^${reviewReference}^${images}^${new Date()}\n`
+            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${faker.lorem.words()}^${images}^${reviewReference}^${faker.date.recent(360)}\n`
         }
         rowGroup = rowGroup.concat(row);
     }
@@ -136,10 +138,10 @@ const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
         for (let start = hotelId; start < boundry; start++) {
             tracker.increment();
             let row;
-            if (start === 100000) {
-                row = `${start}^${faker.lorem.words()}^${faker.lorem.words() + start}^${Math.floor(Math.random() * 100 + 1)}^${Math.floor(Math.random() * 40)}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${faker.lorem.words()}^${faker.lorem.words()}`;
+            if (start === 10000000) {
+                row = `${start}^${faker.internet.userName()}^${faker.address.city()}^${faker.company.companyName()}^${faker.name.jobTitle()}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${Math.floor(Math.random() * 100)}^${Math.floor(Math.random() * 30)}^${faker.lorem.words()}`
             } else {
-                row = `${start}^${faker.lorem.words()}^${faker.lorem.words() + start}^${Math.floor(Math.random() * 100 + 1)}^${Math.floor(Math.random() * 40)}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${faker.lorem.words()}^${faker.lorem.words()}\n`;
+                row = `${start}^${faker.internet.userName()}^${faker.address.city()}^${faker.company.companyName()}^${faker.name.jobTitle()}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${Math.floor(Math.random() * 100)}^${Math.floor(Math.random() * 30)}^${faker.lorem.words()}\n`
             }
             group = group.concat(row);
         }
@@ -151,32 +153,40 @@ const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
     } else {
         for (let start = hotelId; start < boundry; start++) {
             tracker.increment();
+            let reviewTable = Math.floor(start / 1000000); // 0 indexed tables
             let row;
-            if (start === 100000000) {
-                row = `${start}^${faker.lorem.words() + start}`;
+            if (start === 10000000) {
+                row = `${start}^${faker.lorem.words() + start}^${reviewTable}`;
             } else {
-                row = `${start}^${faker.lorem.words() + start}\n`;
+                row = `${start}^${faker.lorem.words() + start}^${reviewTable}\n`;
             }
             group = group.concat(row);
         }
     }
     return  group;
 }
-    
-function exportDataForBd(forCassandra, table, fileNum) {
-    let stream = forCassandra ? fs.createWriteStream('./database/cassandraData.csv') : fs.createWriteStream(`../database/postgres${table}_${fileNum}.csv`);
-    tracker.start(5000000, 0);
+
+const exportDataForBd = async (forCassandra, table, next) => {
+    let stream = await forCassandra ? fs.createWriteStream('./database/cassandraData.csv') : fs.createWriteStream(`./database/postgres${table}.csv`);
+    tracker.start(10000000, 0);
     let hotelId = 1;
-    const write = function() {
+    const write = async function() {
         while (hotelId < 10000000) {
-            let entries = forCassandra ? makeCassandraEntries(inputs, ) : makePostgresEntries('posts', hotelId, hotelId + 10000);
-            stream.write(entries);
+            let entries = forCassandra ? makeCassandraEntries(inputs, hotelId, hotelId + 10 ) : makePostgresEntries(table, hotelId, hotelId + 10000);
+            await stream.write(entries);
             hotelId+= 10000;
         }
         stream.once('drain', write);
         tracker.stop();
+        if (hotelId === 10000000) {
+            next();
+        };
     }
     write();
 }
 
-exportDataForBd(false, 'posts', 2);
+process.on('message', ({forCassandra, table}) => {
+    exportDataForBd(forCassandra, table, () => {
+        process.send('done');
+    });
+})
