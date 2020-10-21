@@ -2,6 +2,7 @@ const faker = require('faker');
 const fs = require("fs");
 const ProgressBar = require('cli-progress');
 const { spawn } = require('child_process');
+const { writer } = require('repl');
 const tracker = new ProgressBar.SingleBar({
     format: 'CLI Progress | {percentage}% || {value}/{total} Entries created',
     barCompleteChar: '\u2588',
@@ -102,7 +103,7 @@ const makeCassandraEntries = (cassandraData, i, boundry) => {
 |     ID  and force create realtionships |
 \---------------------------------------*/
 const makeReviews = (hotelId, boundry) => {
-    let numberOfRevews = Math.floor(Math.random() * 20 + 3);
+    let numberOfRevews = Math.floor(Math.random() * 10 + 1);
     let rowGroup = '';
     let previousReview = 0;
     let reviewReference = null;
@@ -112,20 +113,18 @@ const makeReviews = (hotelId, boundry) => {
         let reviewId, postText, row, images;
         if (isReview) { 
             images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`
-            postText = JSON.stringify(faker.lorem.paragraphs()); 
             reviewId = previousReview; 
             previousReview++; 
             reviewReference = null;
         } else {
             images = `${null}^${null}^${null}^${null}`;
-            postText = faker.lorem.paragraph();
             reviewId = null;
             reviewReference = previousReview;
         }
         if (hotelId === 10000000 && start === numberOfRevews) {
-            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${reviewReference}^${faker.date.recent(360)}`
+            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${reviewReference}^${faker.date.recent(360)}`
         } else {
-            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${postText}^${faker.lorem.words()}^${images}^${reviewReference}^${faker.date.recent(360)}\n`
+            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${reviewReference}^${faker.date.recent(360)}\n`
         }
         rowGroup = rowGroup.concat(row);
     }
@@ -141,7 +140,7 @@ const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
             if (start === 10000000) {
                 row = `${start}^${faker.internet.userName()}^${faker.address.city()}^${faker.company.companyName()}^${faker.name.jobTitle()}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${Math.floor(Math.random() * 100)}^${Math.floor(Math.random() * 30)}^${faker.lorem.words()}`
             } else {
-                row = `${start}^${faker.internet.userName()}^${faker.address.city()}^${faker.company.companyName()}^${faker.name.jobTitle()}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${Math.floor(Math.random() * 100)}^${Math.floor(Math.random() * 30)}^${faker.lorem.words()}\n`
+                row = `${start}^${faker.internet.userName()}^${faker.address.city()}^${faker.lorem.word()}^${faker.name.jobTitle()}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${Math.floor(Math.random() * 100)}^${Math.floor(Math.random() * 30)}^${faker.lorem.words()}\n`
             }
             group = group.concat(row);
         }
@@ -167,19 +166,23 @@ const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
 }
 
 const exportDataForBd = async (forCassandra, table, next) => {
-    let stream = await forCassandra ? fs.createWriteStream('./database/cassandraData.csv') : fs.createWriteStream(`./database/postgres${table}.csv`);
+    let stream = await forCassandra ? fs.createWriteStream('../database/cassandraData.csv') : fs.createWriteStream(`../database/postgres${table}.csv`);
     tracker.start(10000000, 0);
     let hotelId = 1;
-    const write = async function() {
-        while (hotelId < 10000000) {
-            let entries = forCassandra ? makeCassandraEntries(inputs, hotelId, hotelId + 10 ) : makePostgresEntries(table, hotelId, hotelId + 10000);
-            await stream.write(entries);
-            hotelId+= 10000;
+    const write = function() {
+        let drained = true;
+        if  (drained) {
+            while (hotelId < 10000000 && drained) {
+                let entries = forCassandra ? makeCassandraEntries(inputs, hotelId, hotelId + 100 ) : makePostgresEntries(table, hotelId, hotelId + 1000);
+                drained = stream.write(entries);
+                hotelId+= 1000;
+            }
         }
-        stream.once('drain', write);
-        tracker.stop();
-        if (hotelId === 10000000) {
-            next();
+        if (hotelId < 10000000) {
+            stream.once('drain', write);
+        } else {
+            tracker.stop();
+            next(forCassandra, table);
         };
     }
     write();
@@ -187,6 +190,7 @@ const exportDataForBd = async (forCassandra, table, next) => {
 
 process.on('message', ({forCassandra, table}) => {
     exportDataForBd(forCassandra, table, () => {
-        process.send('done');
+        let msg = forCassandra ? `Cassandra: ${table}` : `Postgres: ${table}`;
+        process.send(msg);
     });
 })
