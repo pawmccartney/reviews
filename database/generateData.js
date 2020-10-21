@@ -9,22 +9,11 @@ const tracker = new ProgressBar.SingleBar({
     barIncompleteChar: '\u2591',
     hideCursor: true
 });
-/*------------------------------------------------------\
-| create a new table partitioned as such                |
-|    million group -                                    |
-|        hundredthosands grouping -                     |
-|            batch (split every 100k / 2) -             |
-|                hotelid -                              |
-|                    reviewTitle(one per hotel) -       |
-|                        reviewerName -                 |
-|                            responderInfo -            |
-\-----------------------------------------------------*/
-const createHotelsTable = `CREATE TABLE hotels(million INT, hundredthousand INT, hotelbatch INT, hotelId INT, hotelname text, reviewTitle text, reviewerName text, reviewImages list<text>, memberInfo map<text, text>, reviewText text, responderUsername text, responderInfo map<text, text>, PRIMARY KEY(million, hundredthousand, hotelbatch, hotelId, reviewTitle, reviewerName, responderUsername));`; 
 
 const makeUrl = (i) => {
-    if (i < 10) return  `https://hr48sdcreviews.s3-us-east-2.amazonaws.com/sdcImages/image0000${i}.jpg`;
-    if (i < 100) return  `https://hr48sdcreviews.s3-us-east-2.amazonaws.com/sdcImages/image000${i}.jpg`;
-    return `https://hr48sdcreviews.s3-us-east-2.amazonaws.com/sdcImages/image00${i}.jpg`;
+    if (i < 10) return  `/image0000${i}.jpg`;
+    if (i < 100) return  `/image000${i}.jpg`;
+    return `/image00${i}.jpg`;
 };
 
 const imageUrls =  (function() {
@@ -35,62 +24,70 @@ const imageUrls =  (function() {
     return imageUrls;
 })();
 
-const getUrlArrayOfImages = function(imagesNeeded) {
-    let urls = [];
-    while (urls.length < imagesNeeded) {
-        urls.push(`'${imageUrls[Math.floor(Math.random() * 687)]}'`);
-    }
-    return urls;
-}
-/*--------------------------------------\
-| Generate randomized seed data         |
-\--------------------------------------*/
-let inputs = {
-    hotelNames: function() {
-        return faker.lorem.word();
-    },
-    reviewTitles: function(i) {
-        return `${faker.lorem.words() +i}`
-    },
-    reviewerNames: function(i) {
-        return faker.lorem.word() + i;
-    },
-    memberInfo: function() {
-        return "{'avatar': 'no link', 'location': 'undefined', 'contributions': 'none', 'helpFul': 'no'}"
-    },
-    reviewText: function() {
-        return `TH LKMhis is sample text`;
-    },
-    responderUsername: function(i) {
-        return `${faker.lorem.word() + i}`;
-    },
-    responderInfo: function(i, date) {
-        let imageUrl = imageUrls[Math.floor(Math.random() * 688)];
-        return `{'name': '${faker.lorem.word()}','hotelId': '${i}','responderOrg': '${faker.lorem.words()}','responderPicture': '${imageUrl}','responderDate': '${date}','reponderPosition': '${faker.lorem.words()}','responderText': '${faker.lorem.paragraph()}'}`;
-    }
-};
-
 /*--------------------------------------\
 |       Batch entires by 100            |
 |   Define inputs and partitions here   |
 \--------------------------------------*/
 
-const makeCassandraEntries = (cassandraData, i, boundry) => {
-    let float = i / 1000000;
-    let million = Math.floor(float); // 0 indexed
-    let hundredThou = million - float  < 0 ? 1 : million - float * 10; // 1 indexed
-    let batch = float - million < 0.5 ? 1 : 2; // partition value: 1st hlf of current 100k group -> 1, 2nd half -> 2 ie; 49,000 -> 1, 51,000 -> 2, 112,000 -> 1, 152,000 -> 2
+let makeReviewInfo = () => {
+    let triptypes = ['Families', 'Couples', 'Solo', 'Business', 'Friends'];
+    let data = {
+        picure1: imageUrls[Math.floor(Math.random() * imageUrls.length)],
+        picture2: imageUrls[Math.floor(Math.random() * imageUrls.length)],
+        picture3: imageUrls[Math.floor(Math.random() * imageUrls.length)],
+        picture4: imageUrls[Math.floor(Math.random() * imageUrls.length)],
+        reviewText:  faker.lorem.sentence(),
+        reviewTripType: triptypes[Math.random(Math.floor() * triptypes.length)],
+        reviewTitle: faker.lorem.words(),
+        reviewRating: Math.floor(Math.random() * 150),
+        reviewDate: faker.date.recent(360)
+    };
+    return JSON.stringify(data);
+};
+
+const makeMemberInfo = (start, hotelId) => {
+    let data = {
+        memberId: `'${Math.floor(Math.random() * start + hotelId)}'`,
+        memberImage: imageUrls[Math.floor(Math.random() * imageUrls.length)],
+        memberUserNaem: faker.lorem.word(),
+        memberLocation: faker.lorem.word(),
+        memberContributions: Math.floor(Math.random() * 700),
+        memberHelpful: Math.floor(Math.random() * 78)
+    };
+    return JSON.stringify(data);
+}
+
+const makeResponseInfo = (hotelID) => {
+    let data = {
+        hotelID: `'${hotelID}'`,
+        responderOrg: faker.lorem.word(),
+        responderPicture: imageUrls[Math.floor(Math.random() * imageUrls.length)],
+        responderClose: faker.lorem.words(),
+        respnderDate: faker.date.recent(360),
+        responderName: faker.lorem.words(),
+        responderPosition: faker.lorem.words(),
+        responderText: faker.lorem.sentence()
+    };
+    return JSON.stringify(data);
+}
+const makeCassandraEntries = (start, boundry) => {
+    let row;
     let group = '';
-    for (let x =  i; x < boundry; x++) {
-        tracker.increment();
-        let row;
-        let date = new Date();
-        if (x === 1000) {
-            row = `${million}^${hundredThou}^${batch}^${x}^${cassandraData.hotelNames()}^${cassandraData.reviewTitles(x)}^${cassandraData.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${cassandraData.memberInfo()}"^"${cassandraData.reviewText()}"^${cassandraData.responderUsername(x)}^"${cassandraData.responderInfo(x, date)}"`;
-        } else {            
-            row = `${million}^${hundredThou}^${batch}^${x}^${cassandraData.hotelNames()}^${cassandraData.reviewTitles(x)}^${cassandraData.reviewerNames(x)}^"[${getUrlArrayOfImages(4)}]"^"${cassandraData.memberInfo()}"^"${cassandraData.reviewText()}"^${cassandraData.responderUsername(x)}^"${cassandraData.responderInfo(x, date)}"\n`;
+    for (let hotelId = start; hotelId < boundry; hotelId++) {
+        let numberOfRevews = Math.floor(Math.random() * 15 + 3);
+        for (let reviewId = 0; reviewId < numberOfRevews; reviewId++) {
+            let reviewInfo = makeReviewInfo();
+            let reviewRatings = Array.from({length: Math.floor(Math.random() * 10)}, () => Math.floor(Math.random() * 10));
+            let responseInfo = makeResponseInfo(hotelId);
+            let memberInfo = makeMemberInfo(start,hotelId);
+            if (hotelId === 10000000 && reviewId === numberOfRevews - 1) {
+                row = `${hotelId}^${reviewId}^${reviewInfo}^${memberInfo}^${responseInfo}^[${reviewRatings}]`
+            } else {            
+                row = `${hotelId}^${reviewId}^${reviewInfo}^${memberInfo}^${responseInfo}^[${reviewRatings}]\n`
+            }
+            group = group.concat(row);
         }
-        group = group.concat(row);
+        tracker.increment();
     }
     return  group;
 }
@@ -105,26 +102,14 @@ const makeCassandraEntries = (cassandraData, i, boundry) => {
 const makeReviews = (hotelId, boundry) => {
     let numberOfRevews = Math.floor(Math.random() * 10 + 1);
     let rowGroup = '';
-    let previousReview = 0;
-    let reviewReference = null;
     let triptypes = ['Families', 'Couples', 'Solo', 'Business', 'Friends'];
     for (let start = 0; start < numberOfRevews; start++) {
-        let isReview = Math.random() < 0.6 ? true : false;
-        let reviewId, postText, row, images;
-        if (isReview) { 
-            images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`
-            reviewId = previousReview; 
-            previousReview++; 
-            reviewReference = null;
-        } else {
-            images = `${null}^${null}^${null}^${null}`;
-            reviewId = null;
-            reviewReference = previousReview;
-        }
+        let row;
+        let images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`; 
         if (hotelId === 10000000 && start === numberOfRevews) {
-            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${reviewReference}^${faker.date.recent(360)}`
+            row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}`
         } else {
-            row = `${isReview}^${hotelId}^${reviewId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.words()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${reviewReference}^${faker.date.recent(360)}\n`
+            row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}\n`
         }
         rowGroup = rowGroup.concat(row);
     }
@@ -166,14 +151,14 @@ const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
 }
 
 const exportDataForBd = async (forCassandra, table, next) => {
-    let stream = await forCassandra ? fs.createWriteStream('../database/cassandraData.csv') : fs.createWriteStream(`../database/postgres${table}.csv`);
+    let stream = await forCassandra ? fs.createWriteStream(`../database/cassandra${table}.csv`) : fs.createWriteStream(`../database/postgres${table}.csv`);
     tracker.start(10000000, 0);
     let hotelId = 1;
     const write = function() {
         let drained = true;
         if  (drained) {
             while (hotelId < 10000000 && drained) {
-                let entries = forCassandra ? makeCassandraEntries(inputs, hotelId, hotelId + 100 ) : makePostgresEntries(table, hotelId, hotelId + 1000);
+                let entries = forCassandra ? makeCassandraEntries(hotelId, hotelId + 1000) : makePostgresEntries(table, hotelId, hotelId + 1000);
                 drained = stream.write(entries);
                 hotelId+= 1000;
             }

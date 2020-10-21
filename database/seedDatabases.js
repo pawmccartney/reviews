@@ -33,51 +33,39 @@ const generateData = function(forCassandra, table) {
 *       
 \--------------------------------------------*/
 
-// generateData(false, 'posts')
-//     .then((res) => {
-//         return generateData(false, 'members');
-//     })
-//     .then((res) => {
-//         return generateData(false, 'hotels');
-//     })
-//     .then((res) => {
-//         return generateData(false, 'hotels');
-//     })
-//     .then((res) => {
-//         return generateData(true, 'hotels');
-//     })
 
 
 const seedData = (database, table) => {
     return new Promise((resolve, reject) => {
         let batch = [];
-        tracker.start(10000000, 0);
         let numOfInserts = 0;
-        let header = table === 'posts' ?  ['isreview', 'hotelid', 'reviewid', 'memberid', 'title', 'text', 'triptype', 'image1', 'image2', 'image3', 'image4', 'reviewreference', 'date'] :  ['id', 'name', 'location', 'orginization', 'position', 'avatar', 'contributions', 'helpful', 'close'];
-        let stream = fs.createReadStream(`../database/${database}${table}.csv`).pipe(CSV({separator: '^', headers: header}));
+        let header = table === 'posts' ?  ['hotelid', 'memberid', 'title', 'text', 'triptype', 'image1', 'image2', 'image3', 'image4', 'date'] :  ['id', 'name', 'location', 'orginization', 'position', 'avatar', 'contributions', 'helpful', 'close'];
+        let stream = fs.createReadStream(`./database/${database}${table}.csv`).pipe(CSV({separator: '^', headers: header}));
         stream.on('data', (row) => {
             if (batch.length < 1000) {
                 let entry;
                 if (table === 'posts') {
-                    entry = `(${row.isreview},${row.hotelid},${row.hotelid},${row.memberid},'${row.title}','${row.text}','${row.triptype}','${row.image1}','${row.image2}','${row.image3}','${row.image4}',${row.reviewreference},'${row.date}')`;
+                    entry = `(${row.hotelid},${row.memberid},'${row.title}','${row.text}','${row.triptype}','${row.image1}','${row.image2}','${row.image3}','${row.image4}','${row.date}')`;
                 } else {
                     entry = `(${row.id},'${row.name}','${row.location}','${row.orginization}','${row.position}','${row.avatar}',${row.contributions},${row.helpful},'${row.close}')`;
                 }
+                debugger;
                 batch.push(entry);
             } else {
                 stream.pause();
-                let query = table === ' members' ? `INSERT INTO members(id,name,location,orginization,position,avatar,contributions,helpful,close)VALUES${batch.join(',')};` : `INSERT INTO posts(isreview,hotelid,reviewid,memberid,title,text,triptype,image1,image2,image3,image4,reviewreference,date)VALUES${batch.join(',')};`;
+                let query = table === ' members' ? `INSERT INTO members(id,name,location,orginization,position,avatar,contributions,helpful,close)VALUES${batch.join(',')};` : `INSERT INTO posts(hotelid,member,title,text,triptype,image1,image2,image3,image4,date)VALUES${batch.join(',')};`;
                 batch = [];
                 pgPool.query(query, (err, res) => {
                     if (err) {
+                        tracker.stop();
                         reject(err);
                     }
                     if (numOfInserts < 10000000) {
-                        tracker.stop();
                         tracker.increment(1000);
                         numOfInserts+= 1000;
                         stream.resume();
                     } else {
+                        tracker.stop();
                         resolve(numOfInserts);
                     }
                 })
@@ -86,13 +74,34 @@ const seedData = (database, table) => {
     })
 }
 
+
 generateData(false, 'posts')
-    .then((msg) => {
-        console.log(msg);
-        return seedData('postgres', 'posts')
+    .then((res) => {
+        return generateData(false, 'members');
     })
-    .then((msg) => {
-        console.log(`${msg} insrted for postfress: memebers.`)
+    .then((res) => {
+        return generateData(false, 'hotels');
+    })
+    .then((res) => {
+        return generateData(true, 'reviews');
+    })
+    .then((res) => {
+        return seedData('postgres', 'posts');
+    })
+    .then(() => {
+        console.log('Postgres posts seeding complete! Onto Postgress members...')
+        return seedData('postgres', 'members')
+    })
+    .then(() => {
+        console.log('Postgres members seeding complete! Onto Postgress hotels...')
+        return seedData('postgres', 'hotels')
+    })
+    .then(() => {
+        console.log('Postgres hotels seeding complete! Onto cassandra reviews...')
+        return seedData('cassandra', 'reviews')
+    })
+    .then(() => {
+        console.log('Seeding for all data compelete ...');
     })
     .catch((err) => {
         tracker.stop();
