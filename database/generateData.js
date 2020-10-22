@@ -1,8 +1,6 @@
 const faker = require('faker');
 const fs = require("fs");
 const ProgressBar = require('cli-progress');
-const { spawn } = require('child_process');
-const { writer } = require('repl');
 const tracker = new ProgressBar.SingleBar({
     format: 'CLI Progress | {percentage}% || {value}/{total} Entries created',
     barCompleteChar: '\u2588',
@@ -25,10 +23,8 @@ const imageUrls =  (function() {
 })();
 
 /*--------------------------------------\
-|       Batch entires by 100            |
-|   Define inputs and partitions here   |
+|      Helper functions for data gen    |
 \--------------------------------------*/
-
 let makeReviewInfo = () => {
     let triptypes = ['Families', 'Couples', 'Solo', 'Business', 'Friends'];
     let data = {
@@ -70,9 +66,9 @@ const makeResponseInfo = (hotelID) => {
     };
     return JSON.stringify(data);
 }
+
 const makeCassandraEntries = (start, boundry) => {
-    let row;
-    let group = '';
+    let row, group = '';
     for (let hotelId = start; hotelId < boundry; hotelId++) {
         let numberOfRevews = Math.floor(Math.random() * 15 + 3);
         for (let reviewId = 0; reviewId < numberOfRevews; reviewId++) {
@@ -94,10 +90,7 @@ const makeCassandraEntries = (start, boundry) => {
 
 
 /*---------------------------------------\
-|   Makes posts to be sorted by hotel ID |
-|     Posts do not have any relation     |
-|     Random data is generated use hotel |
-|     ID  and force create realtionships |
+    generate posts with random data
 \---------------------------------------*/
 const makeReviews = (hotelId, boundry) => {
     let numberOfRevews = Math.floor(Math.random() * 10 + 1);
@@ -116,6 +109,22 @@ const makeReviews = (hotelId, boundry) => {
     return rowGroup;
 }
 
+const makeReviews = (hotelId, boundry) => {
+    let numberOfRevews = Math.floor(Math.random() * 10 + 1);
+    let rowGroup = '';
+    let triptypes = ['Families', 'Couples', 'Solo', 'Business', 'Friends'];
+    for (let start = 0; start < numberOfRevews; start++) {
+        let row;
+        let images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`; 
+        if (hotelId === 10000000 && start === numberOfRevews) {
+            row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}`
+        } else {
+            row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}\n`
+        }
+        rowGroup = rowGroup.concat(row);
+    }
+    return rowGroup;
+}
 const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
     let group = '';
     if (table === 'members') {
@@ -150,6 +159,10 @@ const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
     return  group;
 }
 
+/*----------------------------------------------------------------------------\
+        Modular function to generate different sets for different tables
+        Add heklper functions above to define new schema/dataset
+\----------------------------------------------------------------------------*/
 const exportDataForBd = async (forCassandra, table, next) => {
     let stream = await forCassandra ? fs.createWriteStream(`../database/cassandra${table}.csv`) : fs.createWriteStream(`../database/postgres${table}.csv`);
     tracker.start(10000000, 0);
@@ -173,6 +186,9 @@ const exportDataForBd = async (forCassandra, table, next) => {
     write();
 }
 
+/*----------------------------------------------------------------------------\
+    All data gen is done through a forked process to be non blocking
+\----------------------------------------------------------------------------*/
 process.on('message', ({forCassandra, table}) => {
     exportDataForBd(forCassandra, table, () => {
         let msg = forCassandra ? `Cassandra: ${table}` : `Postgres: ${table}`;
