@@ -124,10 +124,11 @@ describe("CRUD operation interface", () => {
         })
     })
 
-    test(`Review should not be found after deleted`, () => {
+    test(`Review should not be found after deleted`, (done) => {
       db.getReview(reviewIdPlaceholder)
         .then((result) => {
           expect(result).toBe(null);
+          done();
         })
         .catch((err) => {
           done(err);
