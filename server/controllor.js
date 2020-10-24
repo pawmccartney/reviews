@@ -13,7 +13,8 @@ const getReviews = (hotelId, next) => {
                     reviewText: review.text,
                     reviewTripType: review.tripType,
                     reviewPictures: {picture1: completeUrl(review.image1), picture2: completeUrl(review.image2), picture3: completeUrl(review.image3), picture4: completeUrl(review.image4)},
-                    reviewRatings: [review.member]
+                    reviewRatings: [review.member],
+                    reviewId: review.reviewid
                 }, 
                 memberInfo: {
                     memberId: review.id,
@@ -37,7 +38,7 @@ const getReviews = (hotelId, next) => {
             return list;
         }, []);
     };
-    postgres.query(`SELECT * FROM posts INNER JOIN members ON posts.member =  members.id WHERE posts.hotelid = ${hotelId + 1} ; `, (err, results) => {
+    postgres.query(`SELECT * FROM posts INNER JOIN members ON posts.member =  members.id WHERE posts.hotelid = ${hotelId} ; `, (err, results) => {
         if (err) next(err);
         let responseData = formatReviews(results.rows);
         next(null, responseData);
@@ -73,7 +74,10 @@ module.exports = {
     getReviews: (hoteIid) => {
         return new Promise((resolve, reject) => {
             getReviews(hoteIid, (err, data) => {
-                if (err) reject(err);
+                if (err) {
+                    console.log('error')
+                    reject(err);
+                }
                 resolve(data);
             })
         })
@@ -82,6 +86,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             addReview(review, (err, resp)  => {
                 if (err) {
+                    console.log('error')
                     reject(err);
                 }
                 resolve(resp);

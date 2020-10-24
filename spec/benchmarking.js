@@ -18,6 +18,6 @@ module.exports = {
     markPUTEnd: () => performance.mark('Finished PUT request'),
     measurePUTTime: () => performance.measure('PUT operation time:', 'Starting PUT test', 'Finished PUT request'),
     markDELETEStart: () => performance.mark('Starting DELETE test'),
-    markDELETEEnd: () => performance.mark('Finished DELETE request'),
+    markDELETEEnd : () => performance.mark('Finished DELETE request'),
     measureDELETETime: () => performance.measure('DELETE operation time:', 'Starting DELETE test', 'Finished DELETE request')
 };

@@ -50,6 +50,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@shelf/jest-mongodb": "^1.2.3",
+    "artillery": "^1.6.1",
     "babel-loader": "^8.1.0",
     "cli-progress": "^3.8.2",
     "csv-parser": "^2.3.3",

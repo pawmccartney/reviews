@@ -62,7 +62,7 @@ const seedData = (database, table) => {
                     return `INSERT INTO hotel_reviews(hotelid, reviewid, memberinfo, responderinfo, reviewinfo, reviewratings)VALUES${batch.join(',')}`;
                 })(database,  table, batch);
                 batch = [];
-                client.query(query, (err, res) => {
+                cassandra.execute(query, (err, res) => {
                     if (err) {
                         tracker.stop();
                         reject(err);
@@ -114,11 +114,11 @@ const seedData = (database, table) => {
 //         tracker.stop();
 //         console.log(err);
 //     })
-generateData('true', 'hotel_reviews')
-    .then((msg) => {
-        console.log(msg);
-        return seedData('cassandra', 'hotel_reviews');
-    })
-    .then((res) => console.log('done'))
-    .catch((err) => consoel.log(err));
+generateData(true, 'hotel_reviews');
+    // .then((msg) => {
+    //     console.log(msg);
+    //     return seedData('cassandra', 'hotel_reviews');
+    // })
+    // .then((res) => console.log('done'))
+    // .catch((err) => consoel.log(err));
     

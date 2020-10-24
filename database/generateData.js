@@ -109,22 +109,22 @@ const makeReviews = (hotelId, boundry) => {
     return rowGroup;
 }
 
-const makeReviews = (hotelId, boundry) => {
-    let numberOfRevews = Math.floor(Math.random() * 10 + 1);
-    let rowGroup = '';
-    let triptypes = ['Families', 'Couples', 'Solo', 'Business', 'Friends'];
-    for (let start = 0; start < numberOfRevews; start++) {
-        let row;
-        let images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`; 
-        if (hotelId === 10000000 && start === numberOfRevews) {
-            row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}`
-        } else {
-            row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}\n`
-        }
-        rowGroup = rowGroup.concat(row);
-    }
-    return rowGroup;
-}
+// const makeReviews = (hotelId, boundry) => {
+//     let numberOfRevews = Math.floor(Math.random() * 10 + 1);
+//     let rowGroup = '';
+//     let triptypes = ['Families', 'Couples', 'Solo', 'Business', 'Friends'];
+//     for (let start = 0; start < numberOfRevews; start++) {
+//         let row;
+//         let images = `${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}^${imageUrls[Math.floor(Math.random() * imageUrls.length)]}`; 
+//         if (hotelId === 10000000 && start === numberOfRevews) {
+//             row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}`
+//         } else {
+//             row = `${hotelId}^${Math.floor(Math.random() * boundry + boundry)}^${faker.lorem.word()}^${faker.lorem.sentence()}^${triptypes[Math.floor(Math.random() * triptypes.length)]}^${images}^${faker.date.recent(360)}\n`
+//         }
+//         rowGroup = rowGroup.concat(row);
+//     }
+//     return rowGroup;
+// }
 const makePostgresEntries = (table, hotelId, boundry, postGresInputs) => {
     let group = '';
     if (table === 'members') {

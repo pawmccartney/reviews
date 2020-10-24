@@ -1,0 +1,25 @@
+config:
+  target: "http://localhost:4003"
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 10
+      name: "warmup"
+    - duration: 10
+      arrivalRate: 10
+      rampTo: 100
+      name: "low-tier"
+    - duration: 60
+      arrivalRate: 100
+      rampTo: 100
+      name: "low-tier"
+scenarios:
+   - name: "GET hotels"
+     flow:
+      - get:
+          url: "/9999999"
+      - post:
+          url: "/"
+          json: 
+            review: {"hotelid": 10, "member": 1000, "title": "none", "text":"I have no text", "triptype": "notfun", "image1": "aslkcmn", "image2": "asklcma", "image3": "akscm", "image4": "alskcn", "date": "nodata"}
+
