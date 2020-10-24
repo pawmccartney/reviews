@@ -1,6 +1,6 @@
 FROM node: latest
 WORKDIR /app
-COPY ..
+COPY . .
 RUN npm install
 EXPOSE 4003
 ENTRYPOINT [ "node", "server/index.js" ]

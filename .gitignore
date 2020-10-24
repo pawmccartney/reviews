@@ -3,4 +3,7 @@ client/dist/bundle.js
 .env
 coverage/
 sdc_reviews.pem
-# make sure to include aws s3
+globalConfig.json
+jest.config.json
+newrelic_agent.log
+package-lock.json
