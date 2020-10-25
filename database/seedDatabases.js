@@ -85,7 +85,6 @@ const seedData = (table) => {
 generateData('posts')
     .then((res) => generateData('members'))
     .then((res) => generateData('hotels'))
-    .then((res) => seedData('posts'))
     .then(() => {
         console.log('Postgres posts seeding complete! Onto Postgress members...')
         return seedData('postgres', 'members')
