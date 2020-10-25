@@ -87,11 +87,11 @@ generateData('posts')
     .then((res) => generateData('hotels'))
     .then(() => {
         console.log('Postgres posts seeding complete! Onto Postgress members...')
-        return seedData('postgres', 'members')
+        return seedData('members')
     })
     .then(() => {
         console.log('Postgres members seeding complete! Onto Postgress hotels...')
-        return seedData('postgres', 'hotels')
+        return seedData('hotels')
     })
     .then(() => console.log('Seeding for all data compelete ...'))
     .catch((err) => {
