@@ -1,4 +1,3 @@
-const db = require('../database/index');
 const postgres  = require('../database/connections/postgres.index');
 
 const getReviews = (hotelId, next) => {
@@ -38,7 +37,7 @@ const getReviews = (hotelId, next) => {
             return list;
         }, []);
     };
-    postgres.query(`SELECT * FROM posts INNER JOIN members ON posts.member =  members.id WHERE posts.hotelid = ${hotelId} ; `, (err, results) => {
+    postgres.query(`SELECT * FROM posts INNER JOIN members ON posts.member =  members.id WHERE posts.hotelid = ${hotelId === '0' ? 1 : hotelId} ; `, (err, results) => {
         if (err) next(err);
         let responseData = formatReviews(results.rows);
         next(null, responseData);

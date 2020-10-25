@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 app.get('/hotel/:hotel', (req, res) => {
-  let hotelId = req.params.hotel === 'root'? 'hotel0': req.params.hotel;
+  let hotelId = req.params.hotel === 'root'? '0': req.params.hotel;
   controllor.getReviews(hotelId)
     .then(result => {
       res.send(result);
