@@ -36,8 +36,7 @@ const generateData = function(table) {
 
 const seedData = (table) => {
     return new Promise((resolve, reject) => {
-        let batch = [];
-        let numOfInserts = 0;
+        let batch = [], numOfInserts = 0;
         let header = ((table) => {
             if (table === 'posts') return ['hotelid', 'memberid', 'title', 'text', 'triptype', 'image1', 'image2', 'image3', 'image4', 'date'];
             if (table === 'hotels') return ['hotelid', 'name', 'reviewTable'];
@@ -82,28 +81,19 @@ const seedData = (table) => {
     })
 }
 
-
 generateData('posts')
-    .then((res) => {
-        return generateData('members');
+    .then((res) => generateData('members'))
+    .then((res) => generateData('hotels'))
+    .then((res) => seedData('posts'))
+    .then(() => {
+        console.log('Postgres posts seeding complete! Onto Postgress members...')
+        return seedData('postgres', 'members')
     })
-    .then((res) => {
-        return generateData('hotels');
+    .then(() => {
+        console.log('Postgres members seeding complete! Onto Postgress hotels...')
+        return seedData('postgres', 'hotels')
     })
-    // .then((res) => {
-    //     // return seedData('posts');
-    // })
-    // .then(() => {
-    //     // console.log('Postgres posts seeding complete! Onto Postgress members...')
-    //     // return seedData('postgres', 'members')
-    // })
-    // .then(() => {
-    //     console.log('Postgres members seeding complete! Onto Postgress hotels...')
-    //     return seedData('postgres', 'hotels')
-    // })
-    // .then(() => {
-    //     console.log('Seeding for all data compelete ...');
-    // })
+    .then(() => console.log('Seeding for all data compelete ...'))
     .catch((err) => {
         tracker.stop();
         console.log(err);
