@@ -81,6 +81,7 @@ const seedData = (table) => {
     })
 }
 
+
 generateData('posts')
     .then((res) => generateData('members'))
     .then((res) => generateData('hotels'))
@@ -98,4 +99,3 @@ generateData('posts')
         tracker.stop();
         console.log(err);
     })
-    
