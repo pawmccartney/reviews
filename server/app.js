@@ -11,13 +11,13 @@ app.use(express.json());
 app.get('/hotel/:hotel', (req, res) => {
   let hotelId = req.params.hotel === 'root'? '0': req.params.hotel;
   controllor.getReviews(hotelId)
-    .then(result => {
+  .then(result => {
+    console.log('sent hotels')
       res.send(result);
     })
     .catch((err) => {
-      res.headers({error: err});
       res.status(500);
-      res.end()
+      res.send({error: err});
     });
 });
 
@@ -36,10 +36,9 @@ app.post('/', (req,  res) => {
       res.send(msg);
     })
     .catch((err) => {
-      res.headers({error: err});
+      console.log('error posting')
       res.status(500);
-      res.end()
-      console.log(`Need to log new error \n\n ${err}`);  
+      res.send({error: err})
     })
 });
   
@@ -51,9 +50,8 @@ app.put('/', (req, res) => {
     })
     .catch((err) => {
       console.log(`err updateing: \n ${err}`);
-      res.headers({error: err});
       res.status(500);
-      res.end()
+      res.send({error: err});
     });
 })
 
@@ -63,10 +61,9 @@ app.delete('/:id', (req, res) => {
       res.send(result);
     })
     .catch((err) => {
-      console.log('Error deleteing: \n',  err);
-      res.headers({error: err});
+      console.log('Error deleteing');
       res.status(500);
-      res.end()
+      res.send({error: err});
     });
 });
 

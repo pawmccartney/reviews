@@ -81,7 +81,6 @@ const seedData = (table) => {
     })
 }
 
-
 generateData('posts')
     .then((res) => generateData('members'))
     .then((res) => generateData('hotels'))

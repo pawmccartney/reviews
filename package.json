@@ -8,7 +8,8 @@
     "start": "nodemon ./server/index.js",
     "watch": "webpack -d --watch",
     "build": "webpack --mode production",
-    "seedDBs": "node database/seedDatabases.js"
+    "seedDBs": "node database/seedDatabases.js",
+    "test:stress": "artillery run spec/load-test-api.yml"
   },
   "repository": {
     "type": "git",
